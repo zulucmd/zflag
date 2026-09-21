@@ -1,0 +1,14 @@
+# changes to the core Go lib package
+"area/lib":
+  - changed-files:
+      - any-glob-to-any-file: ["./*.go"]
+
+# changes to GitHub workflows
+"area/github":
+  - changed-files:
+      - any-glob-to-any-file: [".github/**/*"]
+
+# changes to validation scripts
+"area/scripts":
+  - changed-files:
+      - any-glob-to-any-file: ["scripts/**"]

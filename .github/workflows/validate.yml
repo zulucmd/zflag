@@ -27,7 +27,7 @@ jobs:
               jq -cMnR '[inputs | select(length>0)] | map(. + ".x")')"
           echo "matrix=${matrix_versions}" >> "$GITHUB_OUTPUT"
 
-          golangci_version="$(yq '.repos[] | select(.repo | contains("golangci-lint")) | .rev' .pre-commit-config.yaml)"
+          golangci_version="$(yq -p toml '.repos[] | select(.repo | contains("golangci-lint")) | .rev' prek.toml)"
           echo "golangci_version=${golangci_version}" >> "$GITHUB_OUTPUT"
     outputs:
       matrix: ${{ steps.go-version-matrix.outputs.matrix }}
@@ -53,9 +53,9 @@ jobs:
           restore-keys: go-mod
       - name: Setup mdtoc
         run: go install sigs.k8s.io/mdtoc@v1.1.0
-      - uses: pre-commit/action@v3.0.0
+      - uses: j178/prek-action@v3.0.0
         env:
-          SKIP: golangci-lint,go-build,go-unit-tests
+          PREK_SKIP: golangci-lint,go-build,go-unit-tests
 
   GolangCI-Lint:
     needs: DetermineVersion

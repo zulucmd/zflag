@@ -25,6 +25,7 @@
   - [Customizing flag usages](#customizing-flag-usages)
   - [Disable printing a flag's default value](#disable-printing-a-flags-default-value)
   - [Disable built-in help flags](#disable-built-in-help-flags)
+- [Development](#development)
 <!-- /toc -->
 
 ## Installation
@@ -437,3 +438,14 @@ is possible to disable this built-in handling.
 ```go
 myFlagSet.DisableBuiltinHelp = true
 ```
+
+## Development
+
+Tooling is managed with [mise](https://mise.jdx.dev). Run `mise install`, then:
+
+- `mise run setup` — install the git hooks (prek)
+- `mise run lint` — run golangci-lint
+- `mise run test` — run the test suite
+- `mise run check` — run every prek hook against all files
+
+Git hooks are run by [prek](https://github.com/j178/prek).
