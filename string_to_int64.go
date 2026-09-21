@@ -19,6 +19,7 @@ type stringToInt64Value struct {
 var _ Value = (*stringToInt64Value)(nil)
 var _ Getter = (*stringToInt64Value)(nil)
 var _ Typed = (*stringToInt64Value)(nil)
+var _ MapValue = (*stringToInt64Value)(nil)
 
 func newStringToInt64Value(val map[string]int64, p *map[string]int64) *stringToInt64Value {
 	ssv := new(stringToInt64Value)
@@ -58,6 +59,8 @@ func (s *stringToInt64Value) Get() interface{} {
 func (s *stringToInt64Value) Type() string {
 	return "stringToInt64"
 }
+
+func (s *stringToInt64Value) IsMap() bool { return true }
 
 func (s *stringToInt64Value) String() string {
 	records := make([]string, 0, len(*s.value)>>1)

@@ -19,6 +19,7 @@ type stringToStringValue struct {
 var _ Value = (*stringToStringValue)(nil)
 var _ Getter = (*stringToStringValue)(nil)
 var _ Typed = (*stringToStringValue)(nil)
+var _ MapValue = (*stringToStringValue)(nil)
 
 func newStringToStringValue(val map[string]string, p *map[string]string) *stringToStringValue {
 	ssv := new(stringToStringValue)
@@ -56,6 +57,8 @@ func (s *stringToStringValue) Get() interface{} {
 func (s *stringToStringValue) Type() string {
 	return "stringToString"
 }
+
+func (s *stringToStringValue) IsMap() bool { return true }
 
 func (s *stringToStringValue) String() string {
 	records := make([]string, 0, len(*s.value)>>1)

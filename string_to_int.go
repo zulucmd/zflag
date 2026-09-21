@@ -19,6 +19,7 @@ type stringToIntValue struct {
 var _ Value = (*stringToIntValue)(nil)
 var _ Getter = (*stringToIntValue)(nil)
 var _ Typed = (*stringToIntValue)(nil)
+var _ MapValue = (*stringToIntValue)(nil)
 
 func newStringToIntValue(val map[string]int, p *map[string]int) *stringToIntValue {
 	ssv := new(stringToIntValue)
@@ -58,6 +59,8 @@ func (s *stringToIntValue) Get() interface{} {
 func (s *stringToIntValue) Type() string {
 	return "stringToInt"
 }
+
+func (s *stringToIntValue) IsMap() bool { return true }
 
 func (s *stringToIntValue) String() string {
 	records := make([]string, 0, len(*s.value)>>1)

@@ -136,6 +136,12 @@ type SliceValue interface {
 	GetSlice() []string
 }
 
+// MapValue is a secondary interface to all flags which hold a map of values.
+type MapValue interface {
+	Value
+	IsMap() bool
+}
+
 // BoolFlag is an optional interface to indicate boolean flags that can be
 // supplied without a value text
 type BoolFlag interface {

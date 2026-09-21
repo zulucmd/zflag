@@ -18,6 +18,7 @@ type intSliceValue struct {
 var _ Value = (*intSliceValue)(nil)
 var _ Getter = (*intSliceValue)(nil)
 var _ Typed = (*intSliceValue)(nil)
+var _ SliceValue = (*intSliceValue)(nil)
 
 func newIntSliceValue(val []int, p *[]int) *intSliceValue {
 	isv := new(intSliceValue)
