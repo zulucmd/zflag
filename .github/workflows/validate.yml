@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      - uses: jdx/mise-action@v3
+        with:
+          install: false
+        env:
+          MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}
       - id: go-version-matrix
         run: |
           go_version="$(awk '/^go/{print $2}' go.mod)"
@@ -27,8 +32,8 @@ jobs:
               jq -cMnR '[inputs | select(length>0)] | map(. + ".x")')"
           echo "matrix=${matrix_versions}" >> "$GITHUB_OUTPUT"
 
-          golangci_version="$(yq -p toml '.repos[] | select(.repo | contains("golangci-lint")) | .rev' prek.toml)"
-          echo "golangci_version=${golangci_version}" >> "$GITHUB_OUTPUT"
+          golangci_version="$(mise ls 'github:golangci/golangci-lint' --current --json | jq -r '.[0].version')"
+          echo "golangci_version=v${golangci_version}" >> "$GITHUB_OUTPUT"
     outputs:
       matrix: ${{ steps.go-version-matrix.outputs.matrix }}
       go_version: ${{ steps.go-version-matrix.outputs.go_version }}
