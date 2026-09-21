@@ -13,7 +13,7 @@ func TestFormatter(t *testing.T) {
 	t.Parallel()
 
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.FlagUsageFormatter = func(f *zflag.Flag) (string, string) {
+	f.FlagUsageFormatter = func(_ *zflag.Flag) (string, string) {
 		return "--not-uis", "not-usage"
 	}
 	f.String("uis", "asom", "testing `varname` and usage", zflag.OptDeprecated("some msg"))

@@ -199,7 +199,7 @@ func (fs *FlagSet) GetNormalizeFunc() func(f *FlagSet, name string) NormalizedNa
 	if fs.normalizeNameFunc != nil {
 		return fs.normalizeNameFunc
 	}
-	return func(f *FlagSet, name string) NormalizedName { return NormalizedName(name) }
+	return func(_ *FlagSet, name string) NormalizedName { return NormalizedName(name) }
 }
 
 func (fs *FlagSet) normalizeFlagName(name string) NormalizedName {
@@ -1029,7 +1029,7 @@ func (fs *FlagSet) parseLongArg(s string, args []string, fn parseFunc) (outArgs 
 			outArgs = fs.stripUnknownFlagValue(outArgs)
 			return
 		default:
-			err = fs.failf(NewUnknownFlagError(name).Error())
+			err = fs.failf("%s", NewUnknownFlagError(name).Error())
 			return
 		}
 	}
@@ -1060,7 +1060,7 @@ func (fs *FlagSet) parseLongArg(s string, args []string, fn parseFunc) (outArgs 
 
 	err = fn(flag, value)
 	if err != nil {
-		err = fs.failf(err.Error())
+		err = fs.failf("%s", err.Error())
 	}
 	return
 }
@@ -1145,7 +1145,7 @@ func (fs *FlagSet) parseSingleShortArg(shorthands string, args []string, fn pars
 
 	err = fn(flag, value)
 	if err != nil {
-		err = fs.failf(err.Error())
+		err = fs.failf("%s", err.Error())
 	}
 	return
 }

@@ -33,7 +33,7 @@ var (
 	normalizeFlagNameInvocations = 0
 )
 
-func TestCmdVars(t *testing.T) {
+func TestCmdVars(_ *testing.T) {
 	var tbool bool
 	zflag.BoolVar(&tbool, "bool_var", false, "bool value")
 
@@ -80,7 +80,7 @@ func TestCmdVars(t *testing.T) {
 	_ = zflag.Complex128Slice("c128s", []complex128{}, "usage")
 	zflag.Complex128SliceVar(&tc128s, "c128s_var", []complex128{}, "usage")
 
-	zflag.Func("func", "", func(s string) error {
+	zflag.Func("func", "", func(_ string) error {
 		return nil
 	})
 
@@ -871,7 +871,7 @@ func replaceSeparators(name string, from []string, to string) string {
 	return result
 }
 
-func wordSepNormalizeFunc(f *zflag.FlagSet, name string) zflag.NormalizedName {
+func wordSepNormalizeFunc(_ *zflag.FlagSet, name string) zflag.NormalizedName {
 	seps := []string{"-", "_"}
 	name = replaceSeparators(name, seps, ".")
 	normalizeFlagNameInvocations++
@@ -929,7 +929,7 @@ func TestWordSepNormalizedNames(t *testing.T) {
 	testWordSepNormalizedNames(args, t)
 }
 
-func aliasAndWordSepFlagNames(f *zflag.FlagSet, name string) zflag.NormalizedName {
+func aliasAndWordSepFlagNames(_ *zflag.FlagSet, name string) zflag.NormalizedName {
 	seps := []string{"-", "_"}
 
 	oldName := replaceSeparators("old-valid_flag", seps, ".")
@@ -1239,7 +1239,6 @@ func TestHelp(t *testing.T) {
 	}
 	if helpCalled {
 		t.Fatal("help called for regular flag")
-		helpCalled = false // reset for next test
 	}
 
 	// Help flag should work as expected.
@@ -1452,7 +1451,7 @@ func TestDeprecatedFlagShorthandInDocs(t *testing.T) {
 	}
 }
 
-func parseReturnStderr(t *testing.T, f *zflag.FlagSet, args []string) (string, error) {
+func parseReturnStderr(_ *testing.T, f *zflag.FlagSet, args []string) (string, error) {
 	oldStderr := os.Stderr
 	r, w, _ := os.Pipe()
 	os.Stderr = w
@@ -1638,7 +1637,7 @@ func TestVisitAllFlagOrder(t *testing.T) {
 	fs := zflag.NewFlagSet("TestVisitAllFlagOrder", zflag.ContinueOnError)
 	fs.SortFlags = false
 	// https://github.com/spf13/zflag/issues/120
-	fs.SetNormalizeFunc(func(f *zflag.FlagSet, name string) zflag.NormalizedName {
+	fs.SetNormalizeFunc(func(_ *zflag.FlagSet, name string) zflag.NormalizedName {
 		return zflag.NormalizedName(name)
 	})
 

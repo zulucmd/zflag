@@ -116,7 +116,7 @@ func TestUserDefinedFunc(t *testing.T) {
 	}
 	// test Func error
 	flags = *zflag.NewFlagSet("test", zflag.ContinueOnError)
-	flags.Func("v", "usage", func(s string) error {
+	flags.Func("v", "usage", func(_ string) error {
 		return fmt.Errorf("test error")
 	})
 	// flag not set, so no error
