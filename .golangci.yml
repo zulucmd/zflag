@@ -10,15 +10,12 @@ linters:
     - gofmt
     - goheader
     - goimports
-    - gosimple
     - govet
     - ineffassign
-    - megacheck
     - misspell
     - nolintlint
     - revive
     - staticcheck
-    - stylecheck
     - typecheck
     - unconvert
     - unused
@@ -31,7 +28,6 @@ issues:
       linters:
         - staticcheck
         - unused
-        - varcheck
         - funlen
     - path: doc.go
       linters:
