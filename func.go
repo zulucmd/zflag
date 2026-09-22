@@ -19,7 +19,7 @@ func (i *funcValue) Set(val string) error {
 }
 
 func (i *funcValue) Type() string {
-	return "string"
+	return "func"
 }
 
 func (i *funcValue) String() string { return "" }
