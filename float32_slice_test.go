@@ -31,19 +31,19 @@ func TestFloat32Slice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []float32{},
-			expectedErr: `invalid argument "" for "--f32s" flag: strconv.ParseFloat: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--f32s" flag: must be a number`,
 		},
 		{
 			name:        "invalid float32",
 			input:       []string{"blabla"},
 			flagDefault: []float32{},
-			expectedErr: `invalid argument "blabla" for "--f32s" flag: strconv.ParseFloat: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--f32s" flag: must be a number`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1.1,1.5"},
 			flagDefault: []float32{},
-			expectedErr: `invalid argument "1.1,1.5" for "--f32s" flag: strconv.ParseFloat: parsing "1.1,1.5": invalid syntax`,
+			expectedErr: `invalid argument "1.1,1.5" for "--f32s" flag: must be a number`,
 		},
 		{
 			name:           "empty value passed",

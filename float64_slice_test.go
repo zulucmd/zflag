@@ -31,19 +31,19 @@ func TestFloat64Slice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []float64{},
-			expectedErr: `invalid argument "" for "--f64s" flag: strconv.ParseFloat: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--f64s" flag: must be a number`,
 		},
 		{
 			name:        "invalid float64",
 			input:       []string{"blabla"},
 			flagDefault: []float64{},
-			expectedErr: `invalid argument "blabla" for "--f64s" flag: strconv.ParseFloat: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--f64s" flag: must be a number`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1.1,1.5"},
 			flagDefault: []float64{},
-			expectedErr: `invalid argument "1.1,1.5" for "--f64s" flag: strconv.ParseFloat: parsing "1.1,1.5": invalid syntax`,
+			expectedErr: `invalid argument "1.1,1.5" for "--f64s" flag: must be a number`,
 		},
 		{
 			name:           "empty value passed",

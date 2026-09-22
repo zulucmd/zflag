@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -31,7 +32,7 @@ func (s *intSliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	out, err := strconv.Atoi(val)
 	if err != nil {
-		return err
+		return errors.New("must be an integer")
 	}
 
 	if !s.changed {
@@ -62,7 +63,7 @@ func (s *intSliceValue) String() string {
 func (s *intSliceValue) Append(val string) error {
 	i, err := strconv.Atoi(val)
 	if err != nil {
-		return err
+		return errors.New("must be an integer")
 	}
 	*s.value = append(*s.value, i)
 	return nil
@@ -74,7 +75,7 @@ func (s *intSliceValue) Replace(val []string) error {
 		var err error
 		out[i], err = strconv.Atoi(d)
 		if err != nil {
-			return err
+			return errors.New("must be an integer")
 		}
 	}
 	*s.value = out

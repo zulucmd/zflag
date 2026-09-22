@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -31,7 +32,7 @@ func (s *durationSliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	out, err := time.ParseDuration(val)
 	if err != nil {
-		return err
+		return errors.New(`must be a duration like "30s" or "5m"`)
 	}
 
 	if !s.changed {
@@ -60,7 +61,11 @@ func (s *durationSliceValue) String() string {
 }
 
 func (s *durationSliceValue) fromString(val string) (time.Duration, error) {
-	return time.ParseDuration(val)
+	d, err := time.ParseDuration(val)
+	if err != nil {
+		return 0, errors.New(`must be a duration like "30s" or "5m"`)
+	}
+	return d, nil
 }
 
 func (s *durationSliceValue) toString(val time.Duration) string {

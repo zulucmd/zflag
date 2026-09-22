@@ -37,7 +37,7 @@ func (s *ipNetSliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	_, n, err := net.ParseCIDR(val)
 	if err != nil {
-		return err
+		return fmt.Errorf("invalid string being converted to CIDR: %s", val)
 	}
 	if n == nil {
 		return fmt.Errorf("invalid string being converted to CIDR: %s", val)
@@ -71,7 +71,7 @@ func (s *ipNetSliceValue) String() string {
 func (s *ipNetSliceValue) fromString(val string) (net.IPNet, error) {
 	_, cidr, err := net.ParseCIDR(val)
 	if err != nil {
-		return net.IPNet{}, err
+		return net.IPNet{}, fmt.Errorf("invalid string being converted to CIDR: %s", val)
 	}
 	return *cidr, nil
 }

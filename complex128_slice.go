@@ -7,6 +7,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -38,7 +39,7 @@ func (s *complex128SliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	out, err := strconv.ParseComplex(val, 128)
 	if err != nil {
-		return err
+		return errors.New("must be a complex number")
 	}
 
 	if !s.changed {
@@ -63,7 +64,11 @@ func (s *complex128SliceValue) String() string {
 }
 
 func (s *complex128SliceValue) fromString(val string) (complex128, error) {
-	return strconv.ParseComplex(val, 128)
+	c, err := strconv.ParseComplex(val, 128)
+	if err != nil {
+		return 0, errors.New("must be a complex number")
+	}
+	return c, nil
 }
 
 func (s *complex128SliceValue) toString(val complex128) string {

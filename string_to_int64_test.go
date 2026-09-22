@@ -44,13 +44,13 @@ func TestStringToInt64(t *testing.T) {
 			name:        "no csv",
 			input:       []string{"test=1,5"},
 			flagDefault: map[string]int64{},
-			expectedErr: `invalid argument "test=1,5" for "--s2i64" flag: strconv.ParseInt: parsing "1,5": invalid syntax`,
+			expectedErr: `invalid argument "test=1,5" for "--s2i64" flag: must be an integer`,
 		},
 		{
 			name:        "single key value pair per arg",
 			input:       []string{"test=1=1"},
 			flagDefault: map[string]int64{},
-			expectedErr: `invalid argument "test=1=1" for "--s2i64" flag: strconv.ParseInt: parsing "1=1": invalid syntax`,
+			expectedErr: `invalid argument "test=1=1" for "--s2i64" flag: must be an integer`,
 		},
 		{
 			name:           "overrides multiple calls",

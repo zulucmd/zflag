@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"sort"
 	"strconv"
@@ -40,7 +41,7 @@ func (s *stringToInt64Value) Set(val string) error {
 	val = strings.TrimSpace(val)
 	v, err := strconv.ParseInt(val, 10, 64)
 	if err != nil {
-		return err
+		return errors.New("must be an integer")
 	}
 
 	if !s.changed {

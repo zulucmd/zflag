@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -35,7 +36,7 @@ func (s *float64SliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	out, err := strconv.ParseFloat(val, 64)
 	if err != nil {
-		return err
+		return errors.New("must be a number")
 	}
 
 	if !s.changed {
@@ -60,7 +61,11 @@ func (s *float64SliceValue) String() string {
 }
 
 func (s *float64SliceValue) fromString(val string) (float64, error) {
-	return strconv.ParseFloat(val, 64)
+	f, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return 0, errors.New("must be a number")
+	}
+	return f, nil
 }
 
 func (s *float64SliceValue) toString(val float64) string {

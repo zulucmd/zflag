@@ -31,19 +31,19 @@ func TestIntSlice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []int{},
-			expectedErr: `invalid argument "" for "--is" flag: strconv.Atoi: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--is" flag: must be an integer`,
 		},
 		{
 			name:        "invalid int",
 			input:       []string{"blabla"},
 			flagDefault: []int{},
-			expectedErr: `invalid argument "blabla" for "--is" flag: strconv.Atoi: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--is" flag: must be an integer`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1,5"},
 			flagDefault: []int{},
-			expectedErr: `invalid argument "1,5" for "--is" flag: strconv.Atoi: parsing "1,5": invalid syntax`,
+			expectedErr: `invalid argument "1,5" for "--is" flag: must be an integer`,
 		},
 		{
 			name:           "empty defaults",

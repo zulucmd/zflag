@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -35,7 +36,7 @@ func (s *uint64SliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	out, err := strconv.ParseUint(val, 0, 64)
 	if err != nil {
-		return err
+		return errors.New("must be a non-negative integer")
 	}
 
 	if !s.changed {
@@ -60,7 +61,11 @@ func (s *uint64SliceValue) String() string {
 }
 
 func (s *uint64SliceValue) fromString(val string) (uint64, error) {
-	return strconv.ParseUint(val, 0, 64)
+	u, err := strconv.ParseUint(val, 0, 64)
+	if err != nil {
+		return 0, errors.New("must be a non-negative integer")
+	}
+	return u, nil
 }
 
 func (s *uint64SliceValue) toString(val uint64) string {

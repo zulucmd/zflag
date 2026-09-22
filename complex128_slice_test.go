@@ -34,19 +34,19 @@ func TestC128Slice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []complex128{},
-			expectedErr: `invalid argument "" for "--c128s" flag: strconv.ParseComplex: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--c128s" flag: must be a complex number`,
 		},
 		{
 			name:        "invalid c128s",
 			input:       []string{"blabla"},
 			flagDefault: []complex128{},
-			expectedErr: `invalid argument "blabla" for "--c128s" flag: strconv.ParseComplex: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--c128s" flag: must be a complex number`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1.0,2.0"},
 			flagDefault: []complex128{},
-			expectedErr: `invalid argument "1.0,2.0" for "--c128s" flag: strconv.ParseComplex: parsing "1.0,2.0": invalid syntax`,
+			expectedErr: `invalid argument "1.0,2.0" for "--c128s" flag: must be a complex number`,
 		},
 		{
 			name:              "multiple values passed",

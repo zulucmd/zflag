@@ -31,19 +31,19 @@ func TestInt16Slice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []int16{},
-			expectedErr: `invalid argument "" for "--i16s" flag: strconv.ParseInt: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--i16s" flag: must be an integer`,
 		},
 		{
 			name:        "invalid int16",
 			input:       []string{"blabla"},
 			flagDefault: []int16{},
-			expectedErr: `invalid argument "blabla" for "--i16s" flag: strconv.ParseInt: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--i16s" flag: must be an integer`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1,5"},
 			flagDefault: []int16{},
-			expectedErr: `invalid argument "1,5" for "--i16s" flag: strconv.ParseInt: parsing "1,5": invalid syntax`,
+			expectedErr: `invalid argument "1,5" for "--i16s" flag: must be an integer`,
 		},
 		{
 			name:           "empty defaults",

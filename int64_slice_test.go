@@ -31,19 +31,19 @@ func TestInt64Slice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []int64{},
-			expectedErr: `invalid argument "" for "--i64s" flag: strconv.ParseInt: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--i64s" flag: must be an integer`,
 		},
 		{
 			name:        "invalid int64",
 			input:       []string{"blabla"},
 			flagDefault: []int64{},
-			expectedErr: `invalid argument "blabla" for "--i64s" flag: strconv.ParseInt: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--i64s" flag: must be an integer`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1,5"},
 			flagDefault: []int64{},
-			expectedErr: `invalid argument "1,5" for "--i64s" flag: strconv.ParseInt: parsing "1,5": invalid syntax`,
+			expectedErr: `invalid argument "1,5" for "--i64s" flag: must be an integer`,
 		},
 		{
 			name:           "empty defaults",

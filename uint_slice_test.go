@@ -31,19 +31,19 @@ func TestUintSlice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []uint{},
-			expectedErr: `invalid argument "" for "--uis" flag: strconv.ParseUint: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--uis" flag: must be a non-negative integer`,
 		},
 		{
 			name:        "invalid uint",
 			input:       []string{"blabla"},
 			flagDefault: []uint{},
-			expectedErr: `invalid argument "blabla" for "--uis" flag: strconv.ParseUint: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--uis" flag: must be a non-negative integer`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"1,5"},
 			flagDefault: []uint{},
-			expectedErr: `invalid argument "1,5" for "--uis" flag: strconv.ParseUint: parsing "1,5": invalid syntax`,
+			expectedErr: `invalid argument "1,5" for "--uis" flag: must be a non-negative integer`,
 		},
 		{
 			name:           "empty defaults",

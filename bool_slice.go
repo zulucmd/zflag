@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -33,7 +34,7 @@ func (s *boolSliceValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	b, err := strconv.ParseBool(val)
 	if err != nil {
-		return err
+		return errors.New("must be true or false")
 	}
 
 	if !s.changed {
@@ -64,7 +65,11 @@ func (s *boolSliceValue) String() string {
 }
 
 func (s *boolSliceValue) fromString(val string) (bool, error) {
-	return strconv.ParseBool(val)
+	b, err := strconv.ParseBool(val)
+	if err != nil {
+		return false, errors.New("must be true or false")
+	}
+	return b, nil
 }
 
 func (s *boolSliceValue) toString(val bool) string {

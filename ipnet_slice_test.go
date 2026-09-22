@@ -39,19 +39,19 @@ func TestIPNetSlice(t *testing.T) {
 			name:        "empty value passed",
 			input:       []string{""},
 			flagDefault: []net.IPNet{},
-			expectedErr: `invalid argument "" for "--cidr" flag: invalid CIDR address: `,
+			expectedErr: `invalid argument "" for "--cidr" flag: invalid string being converted to CIDR: `,
 		},
 		{
 			name:        "invalid ip",
 			input:       []string{"blabla"},
 			flagDefault: []net.IPNet{},
-			expectedErr: `invalid argument "blabla" for "--cidr" flag: invalid CIDR address: blabla`,
+			expectedErr: `invalid argument "blabla" for "--cidr" flag: invalid string being converted to CIDR: blabla`,
 		},
 		{
 			name:        "no csv",
 			input:       []string{"192.168.1.1/16,172.16.1.1/16"},
 			flagDefault: []net.IPNet{},
-			expectedErr: `invalid argument "192.168.1.1/16,172.16.1.1/16" for "--cidr" flag: invalid CIDR address: 192.168.1.1/16,172.16.1.1/16`,
+			expectedErr: `invalid argument "192.168.1.1/16,172.16.1.1/16" for "--cidr" flag: invalid string being converted to CIDR: 192.168.1.1/16,172.16.1.1/16`,
 		},
 		{
 			name:           "empty defaults",
