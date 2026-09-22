@@ -5,8 +5,6 @@ package zflag_test
 
 import (
 	"io/ioutil"
-	"sort"
-	"strings"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -14,21 +12,21 @@ import (
 
 func TestStringToString(t *testing.T) {
 	tests := []struct {
-		name              string
-		input             []string
-		flagDefault       map[string]string
-		flagOpts          []zflag.Opt
-		expectedErr       string
-		expectedValues    map[string]string
-		expectedStrValues []string
-		visitor           func(f *zflag.Flag)
+		name           string
+		input          []string
+		flagDefault    map[string]string
+		flagOpts       []zflag.Opt
+		expectedErr    string
+		expectedValues map[string]string
+		expectedStr    string
+		visitor        func(f *zflag.Flag)
 	}{
 		{
-			name:              "no value passed",
-			input:             []string{},
-			flagDefault:       map[string]string{},
-			expectedValues:    map[string]string{},
-			expectedStrValues: []string{},
+			name:           "no value passed",
+			input:          []string{},
+			flagDefault:    map[string]string{},
+			expectedValues: map[string]string{},
+			expectedStr:    "[]",
 		},
 		{
 			name:        "empty value passed",
@@ -43,61 +41,61 @@ func TestStringToString(t *testing.T) {
 			expectedErr: `invalid argument "blabla" for "--s2s" flag: "blabla" must be formatted as key=value`,
 		},
 		{
-			name:              "no csv",
-			input:             []string{"test=1,5"},
-			flagDefault:       map[string]string{},
-			expectedValues:    map[string]string{"test": "1,5"},
-			expectedStrValues: []string{`test="1,5"`},
+			name:           "no csv",
+			input:          []string{"test=1,5"},
+			flagDefault:    map[string]string{},
+			expectedValues: map[string]string{"test": "1,5"},
+			expectedStr:    `[test="1,5"]`,
 		},
 		{
-			name:              "single key value pair per arg",
-			input:             []string{"test=1=1"},
-			flagDefault:       map[string]string{},
-			expectedValues:    map[string]string{"test": "1=1"},
-			expectedStrValues: []string{`test="1=1"`},
+			name:           "single key value pair per arg",
+			input:          []string{"test=1=1"},
+			flagDefault:    map[string]string{},
+			expectedValues: map[string]string{"test": "1=1"},
+			expectedStr:    `[test="1=1"]`,
 		},
 		{
-			name:              "overrides multiple calls",
-			input:             []string{"test=1", "test=5"},
-			flagDefault:       map[string]string{},
-			expectedValues:    map[string]string{"test": "5"},
-			expectedStrValues: []string{`test="5"`},
+			name:           "overrides multiple calls",
+			input:          []string{"test=1", "test=5"},
+			flagDefault:    map[string]string{},
+			expectedValues: map[string]string{"test": "5"},
+			expectedStr:    `[test="5"]`,
 		},
 		{
-			name:              "empty defaults",
-			input:             []string{"test=1", "test2=5"},
-			flagDefault:       map[string]string{},
-			expectedValues:    map[string]string{"test": "1", "test2": "5"},
-			expectedStrValues: []string{`test="1"`, `test2="5"`},
+			name:           "empty defaults",
+			input:          []string{"test=1", "test2=5"},
+			flagDefault:    map[string]string{},
+			expectedValues: map[string]string{"test": "1", "test2": "5"},
+			expectedStr:    `[test="1" test2="5"]`,
 		},
 		{
-			name:              "overrides default values",
-			input:             []string{"test=1", "test2=5"},
-			flagDefault:       map[string]string{"test2": "1", "test": "5"},
-			expectedValues:    map[string]string{"test": "1", "test2": "5"},
-			expectedStrValues: []string{`test="1"`, `test2="5"`},
+			name:           "overrides default values",
+			input:          []string{"test=1", "test2=5"},
+			flagDefault:    map[string]string{"test2": "1", "test": "5"},
+			expectedValues: map[string]string{"test": "1", "test2": "5"},
+			expectedStr:    `[test="1" test2="5"]`,
 		},
 		{
-			name:              "returns default values",
-			input:             []string{},
-			flagDefault:       map[string]string{"test2": "1", "test": "5"},
-			expectedValues:    map[string]string{"test2": "1", "test": "5"},
-			expectedStrValues: []string{`test2="1"`, `test="5"`},
+			name:           "returns default values",
+			input:          []string{},
+			flagDefault:    map[string]string{"test2": "1", "test": "5"},
+			expectedValues: map[string]string{"test2": "1", "test": "5"},
+			expectedStr:    `[test="5" test2="1"]`,
 		},
 		{
-			name:              "keeps whitespace",
-			input:             []string{"test1=asd   ", "test2=   value", "test3=    asd   ", "test4=multi\nline\narg\npassed\nin\n"},
-			flagDefault:       map[string]string{},
-			expectedValues:    map[string]string{"test1": "asd   ", "test2": "   value", "test3": "    asd   ", "test4": "multi\nline\narg\npassed\nin\n"},
-			expectedStrValues: nil, // this one is a bit hard to test as maps don't keep order.
+			name:           "keeps whitespace",
+			input:          []string{"test1=asd   ", "test2=   value", "test3=    asd   ", "test4=multi\nline\narg\npassed\nin\n"},
+			flagDefault:    map[string]string{},
+			expectedValues: map[string]string{"test1": "asd   ", "test2": "   value", "test3": "    asd   ", "test4": "multi\nline\narg\npassed\nin\n"},
+			expectedStr:    `[test1="asd   " test2="   value" test3="    asd   " test4="multi\nline\narg\npassed\nin\n"]`,
 		},
 		{
-			name:              "value optional",
-			input:             []string{"test1"},
-			flagDefault:       map[string]string{},
-			flagOpts:          []zflag.Opt{zflag.OptMapValueOptional()},
-			expectedValues:    map[string]string{"test1": ""},
-			expectedStrValues: []string{`test1=""`},
+			name:           "value optional",
+			input:          []string{"test1"},
+			flagDefault:    map[string]string{},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]string{"test1": ""},
+			expectedStr:    `[test1=""]`,
 		},
 	}
 
@@ -133,21 +131,7 @@ func TestStringToString(t *testing.T) {
 			assertNoErr(t, err)
 			assertDeepEqual(t, test.expectedValues, int16SliceGet)
 
-			if test.expectedStrValues != nil {
-				flag := f.Lookup("s2s")
-				strVal := flag.Value.String()
-				if len(test.expectedStrValues) == 0 {
-					assertEqual(t, "[]", strVal)
-				} else {
-					assertEqual(t, '[', rune(strVal[0]))
-					assertEqual(t, ']', rune(strVal[len(strVal)-1]))
-
-					strVals := strings.Split(strVal[1:len(strVal)-1], " ")
-					sort.Strings(strVals)
-					sort.Strings(test.expectedStrValues)
-					assertDeepEqual(t, test.expectedStrValues, strVals)
-				}
-			}
+			assertEqual(t, test.expectedStr, f.Lookup("s2s").Value.String())
 
 			defer assertNoPanic(t)()
 			mustStringToString := f.MustGetStringToString("s2s")
