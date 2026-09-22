@@ -30,17 +30,17 @@ func TestDuration(t *testing.T) {
 		{
 			name:        "empty value passed",
 			input:       repeatFlag("--dur", ""),
-			expectedErr: `invalid argument "" for "--dur" flag: time: invalid duration ""`,
+			expectedErr: `invalid argument "" for "--dur" flag: must be a duration like "30s" or "5m"`,
 		},
 		{
 			name:        "invalid time.Duration",
 			input:       repeatFlag("--dur", "blabla"),
-			expectedErr: `invalid argument "blabla" for "--dur" flag: time: invalid duration "blabla"`,
+			expectedErr: `invalid argument "blabla" for "--dur" flag: must be a duration like "30s" or "5m"`,
 		},
 		{
 			name:        "no csv",
 			input:       repeatFlag("--dur", "1s,2m"),
-			expectedErr: `invalid argument "1s,2m" for "--dur" flag: time: unknown unit "s," in duration "1s,2m"`,
+			expectedErr: `invalid argument "1s,2m" for "--dur" flag: must be a duration like "30s" or "5m"`,
 		},
 		{
 			name:          "repeated value",

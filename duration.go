@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strings"
 	"time"
 )
@@ -23,8 +24,11 @@ func newDurationValue(val time.Duration, p *time.Duration) *durationValue {
 func (d *durationValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	v, err := time.ParseDuration(val)
+	if err != nil {
+		return errors.New(`must be a duration like "30s" or "5m"`)
+	}
 	*d = durationValue(v)
-	return err
+	return nil
 }
 
 func (d *durationValue) Get() interface{} {

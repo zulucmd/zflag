@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -23,8 +24,11 @@ func newFloat64Value(val float64, p *float64) *float64Value {
 func (f *float64Value) Set(val string) error {
 	val = strings.TrimSpace(val)
 	v, err := strconv.ParseFloat(val, 64)
+	if err != nil {
+		return errors.New("must be a number")
+	}
 	*f = float64Value(v)
-	return err
+	return nil
 }
 
 func (f *float64Value) Get() interface{} {

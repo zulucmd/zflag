@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -23,8 +24,11 @@ func newInt8Value(val int8, p *int8) *int8Value {
 func (i *int8Value) Set(val string) error {
 	val = strings.TrimSpace(val)
 	v, err := strconv.ParseInt(val, 0, 8)
+	if err != nil {
+		return errors.New("must be an integer")
+	}
 	*i = int8Value(v)
-	return err
+	return nil
 }
 
 func (i *int8Value) Get() interface{} {

@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -33,7 +34,7 @@ func (b *boolValue) Set(val string) error {
 		var err error
 		v, err = strconv.ParseBool(val)
 		if err != nil {
-			return err
+			return errors.New("must be true or false")
 		}
 	}
 	*b = boolValue(v)

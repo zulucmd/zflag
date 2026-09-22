@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -23,8 +24,11 @@ func newUintValue(val uint, p *uint) *uintValue {
 func (i *uintValue) Set(val string) error {
 	val = strings.TrimSpace(val)
 	v, err := strconv.ParseUint(val, 0, 64)
+	if err != nil {
+		return errors.New("must be a non-negative integer")
+	}
 	*i = uintValue(v)
-	return err
+	return nil
 }
 
 func (i *uintValue) Get() interface{} {

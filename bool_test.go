@@ -36,13 +36,13 @@ func TestBool(t *testing.T) {
 			name:        "invalid bool",
 			input:       repeatFlag("--bs", "blabla"),
 			flagDefault: false,
-			expectedErr: `invalid argument "blabla" for "--bs" flag: strconv.ParseBool: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--bs" flag: must be true or false`,
 		},
 		{
 			name:        "no csv",
 			input:       repeatFlag("--bs", "true,false"),
 			flagDefault: false,
-			expectedErr: `invalid argument "true,false" for "--bs" flag: strconv.ParseBool: parsing "true,false": invalid syntax`,
+			expectedErr: `invalid argument "true,false" for "--bs" flag: must be true or false`,
 		},
 		{
 			name:        "non-existent flag prefixed with `no-` does not panic",

@@ -850,6 +850,58 @@ func TestParseRepeated(t *testing.T) {
 	})
 }
 
+func TestInvalidArgumentMessages(t *testing.T) {
+	tests := []struct {
+		name     string
+		register func(f *zflag.FlagSet)
+		raw      string
+		want     string
+	}{
+		{
+			name:     "bool",
+			register: func(f *zflag.FlagSet) { f.Bool("value", false, "") },
+			raw:      "x",
+			want:     `invalid argument "x" for "--value" flag: must be true or false`,
+		},
+		{
+			name:     "int",
+			register: func(f *zflag.FlagSet) { f.Int("value", 0, "") },
+			raw:      "x",
+			want:     `invalid argument "x" for "--value" flag: must be an integer`,
+		},
+		{
+			name:     "uint",
+			register: func(f *zflag.FlagSet) { f.Uint("value", 0, "") },
+			raw:      "-1",
+			want:     `invalid argument "-1" for "--value" flag: must be a non-negative integer`,
+		},
+		{
+			name:     "float64",
+			register: func(f *zflag.FlagSet) { f.Float64("value", 0, "") },
+			raw:      "x",
+			want:     `invalid argument "x" for "--value" flag: must be a number`,
+		},
+		{
+			name:     "duration",
+			register: func(f *zflag.FlagSet) { f.Duration("value", 0, "") },
+			raw:      "soon",
+			want:     `invalid argument "soon" for "--value" flag: must be a duration like "30s" or "5m"`,
+		},
+	}
+
+	t.Parallel()
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
+			f.SetOutput(ioutil.Discard)
+			test.register(f)
+			assertErrMsg(t, test.want, f.Parse([]string{"--value=" + test.raw}))
+		})
+	}
+}
+
 func TestChangedHelper(t *testing.T) {
 	f := zflag.NewFlagSet("changedtest", zflag.ContinueOnError)
 	f.Bool("changed", false, "changed bool")
