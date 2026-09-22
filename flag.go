@@ -173,8 +173,8 @@ type BoolFlag interface {
 }
 
 // OptionalValue is an interface implemented by Values that may be supplied
-// without a value argument, such as boolean and count flags. When IsOptional
-// reports true, the flag may appear on its own.
+// without a value argument, such as boolean and count flags. Implementing it
+// marks the flag as optional.
 type OptionalValue interface {
 	Value
 	IsOptional() bool

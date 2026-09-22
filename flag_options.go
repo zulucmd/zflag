@@ -37,7 +37,7 @@ func OptShorthand(shorthand rune) Opt {
 }
 
 // OptShorthandStr sets the one-letter shorthand for the flag from a string.
-// It panics if the string is not a single rune.
+// It panics if the string contains more than one rune.
 func OptShorthandStr(shorthand string) Opt {
 	r, err := shorthandStrToRune(shorthand)
 	if err != nil {
