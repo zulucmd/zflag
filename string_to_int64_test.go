@@ -14,6 +14,7 @@ func TestStringToInt64(t *testing.T) {
 	tests := []struct {
 		name           string
 		flagDefault    map[string]int64
+		flagOpts       []zflag.Opt
 		input          []string
 		expectedErr    string
 		expectedValues map[string]int64
@@ -87,6 +88,43 @@ func TestStringToInt64(t *testing.T) {
 			expectedValues: map[string]int64{"test": 1, "test2": 5, "test3": 9},
 			expectedStr:    "[test=1 test2=5 test3=9]",
 		},
+		{
+			name:        "value not optional by default",
+			input:       []string{"test1"},
+			flagDefault: map[string]int64{},
+			expectedErr: `invalid argument "test1" for "--s2i64" flag: test1 must be formatted as key=value`,
+		},
+		{
+			name:           "value optional",
+			input:          []string{"test1"},
+			flagDefault:    map[string]int64{},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]int64{"test1": 0},
+			expectedStr:    "[test1=0]",
+		},
+		{
+			name:           "value optional mixed with explicit values",
+			input:          []string{"test1", "test2=5"},
+			flagDefault:    map[string]int64{},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]int64{"test1": 0, "test2": 5},
+			expectedStr:    "[test1=0 test2=5]",
+		},
+		{
+			name:           "value optional overrides default values",
+			input:          []string{"test1"},
+			flagDefault:    map[string]int64{"test2": 1},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]int64{"test1": 0},
+			expectedStr:    "[test1=0]",
+		},
+		{
+			name:        "value optional rejects explicit empty value",
+			input:       []string{"test1="},
+			flagDefault: map[string]int64{},
+			flagOpts:    []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedErr: `invalid argument "test1=" for "--s2i64" flag: must be an integer`,
+		},
 	}
 
 	t.Parallel()
@@ -97,7 +135,7 @@ func TestStringToInt64(t *testing.T) {
 			var s2i64 map[string]int64
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
 			f.SetOutput(ioutil.Discard)
-			f.StringToInt64Var(&s2i64, "s2i64", test.flagDefault, "usage")
+			f.StringToInt64Var(&s2i64, "s2i64", test.flagDefault, "usage", test.flagOpts...)
 			err := f.Parse(repeatFlag("--s2i64", test.input...))
 			if test.expectedErr != "" {
 				assertErr(t, err)
