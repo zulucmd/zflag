@@ -18,6 +18,7 @@
   - [Required flags](#required-flags)
   - [Disable sorting of flags](#disable-sorting-of-flags)
   - [Supporting Go flags when using zflag](#supporting-go-flags-when-using-zflag)
+  - [Using zflag with go test](#using-zflag-with-go-test)
   - [Shorthand flags](#shorthand-flags)
   - [Shorthand-only flags](#shorthand-only-flags)
   - [Unknown flags](#unknown-flags)
@@ -319,6 +320,28 @@ var ip *int = flag.Int("flagname", 1234, "help message for flagname")
 func main() {
 	flag.CommandLine.AddGoFlagSet(goflag.CommandLine)
 	flag.Parse()
+}
+```
+
+### Using zflag with go test
+
+When `go test` runs your binary it passes its own flags as `-test.*`; typing
+`-v` becomes `-test.v=true`. zflag skips them while parsing, so a
+`zflag.Parse()` in `TestMain` leaves them alone for the standard `flag`
+package. Pass them on with `ParseSkippedFlags`:
+
+```go
+import (
+	goflag "flag"
+	"os"
+
+	flag "github.com/zulucmd/zflag/v2"
+)
+
+func TestMain(m *testing.M) {
+	flag.ParseSkippedFlags(os.Args[1:], goflag.CommandLine)
+	flag.Parse()
+	os.Exit(m.Run())
 }
 ```
 

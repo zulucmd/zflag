@@ -10,6 +10,15 @@ import (
 	"unicode/utf8"
 )
 
+// go test flags prefixes
+func isGotestFlag(flag string) bool {
+	return strings.HasPrefix(flag, "-test.")
+}
+
+func isGotestShorthandFlag(flag string) bool {
+	return strings.HasPrefix(flag, "test.")
+}
+
 // flagValueWrapper implements zflag.Value around a flag.Value.  The main
 // difference here is the addition of the Type method that returns a string
 // name of the type.  As this is generally unknown, we approximate that with
@@ -105,4 +114,17 @@ func (fs *FlagSet) AddGoFlagSet(newSet *goflag.FlagSet) {
 		fs.addedGoFlagSets = make([]*goflag.FlagSet, 0)
 	}
 	fs.addedGoFlagSets = append(fs.addedGoFlagSets, newSet)
+}
+
+// ParseSkippedFlags parses go test flags (the ones starting with "-test.") with the
+// given goflag.FlagSet, since zflag.Parse() skips them.
+// Typical usage: ParseSkippedFlags(os.Args[1:], goflag.CommandLine)
+func ParseSkippedFlags(osArgs []string, goFlagSet *goflag.FlagSet) error {
+	var skippedFlags []string
+	for _, f := range osArgs {
+		if isGotestFlag(f) {
+			skippedFlags = append(skippedFlags, f)
+		}
+	}
+	return goFlagSet.Parse(skippedFlags)
 }

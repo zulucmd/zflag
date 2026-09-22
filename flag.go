@@ -1081,6 +1081,11 @@ func isBool(v string) bool {
 //nolint:funlen
 func (fs *FlagSet) parseSingleShortArg(shorthands string, args []string, fn parseFunc) (outShorts string, outArgs []string, err error) {
 	outArgs = args
+
+	if isGotestShorthandFlag(shorthands) {
+		return
+	}
+
 	outShorts = shorthands[1:]
 	char, _ := utf8.DecodeRuneInString(shorthands)
 
