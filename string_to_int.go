@@ -5,6 +5,7 @@ package zflag
 
 import (
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -63,9 +64,15 @@ func (s *stringToIntValue) Type() string {
 func (s *stringToIntValue) IsMap() bool { return true }
 
 func (s *stringToIntValue) String() string {
+	keys := make([]string, 0, len(*s.value))
+	for k := range *s.value {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	records := make([]string, 0, len(*s.value)>>1)
-	for k, v := range *s.value {
-		records = append(records, k+"="+strconv.Itoa(v))
+	for _, k := range keys {
+		records = append(records, k+"="+strconv.Itoa((*s.value)[k]))
 	}
 
 	return fmt.Sprintf("%s", records)

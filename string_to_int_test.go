@@ -5,8 +5,6 @@ package zflag_test
 
 import (
 	"io/ioutil"
-	"sort"
-	"strings"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -14,13 +12,13 @@ import (
 
 func TestStringToInt(t *testing.T) {
 	tests := []struct {
-		name              string
-		flagDefault       map[string]int
-		input             []string
-		expectedErr       string
-		expectedValues    map[string]int
-		expectedStrValues []string
-		visitor           func(f *zflag.Flag)
+		name           string
+		flagDefault    map[string]int
+		input          []string
+		expectedErr    string
+		expectedValues map[string]int
+		expectedStr    string
+		visitor        func(f *zflag.Flag)
 	}{
 		{
 			name:           "no value passed",
@@ -28,6 +26,7 @@ func TestStringToInt(t *testing.T) {
 			flagDefault:    map[string]int{},
 			expectedErr:    "",
 			expectedValues: map[string]int{},
+			expectedStr:    "[]",
 		},
 		{
 			name:        "empty value passed",
@@ -54,39 +53,39 @@ func TestStringToInt(t *testing.T) {
 			expectedErr: `invalid argument "test=1=1" for "--s2i" flag: strconv.Atoi: parsing "1=1": invalid syntax`,
 		},
 		{
-			name:              "overrides multiple calls",
-			input:             []string{"test=1", "test=5"},
-			flagDefault:       map[string]int{},
-			expectedValues:    map[string]int{"test": 5},
-			expectedStrValues: []string{"test=5"},
+			name:           "overrides multiple calls",
+			input:          []string{"test=1", "test=5"},
+			flagDefault:    map[string]int{},
+			expectedValues: map[string]int{"test": 5},
+			expectedStr:    "[test=5]",
 		},
 		{
-			name:              "empty defaults",
-			input:             []string{"test=1", "test2=5"},
-			flagDefault:       map[string]int{},
-			expectedValues:    map[string]int{"test": 1, "test2": 5},
-			expectedStrValues: []string{"test=1", "test2=5"},
+			name:           "empty defaults",
+			input:          []string{"test=1", "test2=5"},
+			flagDefault:    map[string]int{},
+			expectedValues: map[string]int{"test": 1, "test2": 5},
+			expectedStr:    "[test=1 test2=5]",
 		},
 		{
-			name:              "overrides default values",
-			input:             []string{"test=1", "test2=5"},
-			flagDefault:       map[string]int{"test2": 1, "test": 5},
-			expectedValues:    map[string]int{"test": 1, "test2": 5},
-			expectedStrValues: []string{"test=1", "test2=5"},
+			name:           "overrides default values",
+			input:          []string{"test=1", "test2=5"},
+			flagDefault:    map[string]int{"test2": 1, "test": 5},
+			expectedValues: map[string]int{"test": 1, "test2": 5},
+			expectedStr:    "[test=1 test2=5]",
 		},
 		{
-			name:              "returns default values",
-			input:             []string{},
-			flagDefault:       map[string]int{"test2": 1, "test": 5},
-			expectedValues:    map[string]int{"test2": 1, "test": 5},
-			expectedStrValues: []string{"test2=1", "test=5"},
+			name:           "returns default values",
+			input:          []string{},
+			flagDefault:    map[string]int{"test2": 1, "test": 5},
+			expectedValues: map[string]int{"test2": 1, "test": 5},
+			expectedStr:    "[test=5 test2=1]",
 		},
 		{
-			name:              "trims input",
-			input:             []string{"test=    1", "test2=5     ", "test3=     9     "},
-			flagDefault:       map[string]int{},
-			expectedValues:    map[string]int{"test": 1, "test2": 5, "test3": 9},
-			expectedStrValues: []string{"test=1", "test2=5", "test3=9"},
+			name:           "trims input",
+			input:          []string{"test=    1", "test2=5     ", "test3=     9     "},
+			flagDefault:    map[string]int{},
+			expectedValues: map[string]int{"test": 1, "test2": 5, "test3": 9},
+			expectedStr:    "[test=1 test2=5 test3=9]",
 		},
 	}
 
@@ -122,19 +121,7 @@ func TestStringToInt(t *testing.T) {
 			assertNoErr(t, err)
 			assertDeepEqual(t, test.expectedValues, s2iGet)
 
-			flag := f.Lookup("s2i")
-			strVal := flag.Value.String()
-			if len(test.expectedStrValues) == 0 {
-				assertEqual(t, "[]", strVal)
-			} else {
-				assertEqual(t, '[', rune(strVal[0]))
-				assertEqual(t, ']', rune(strVal[len(strVal)-1]))
-
-				strVals := strings.Split(strVal[1:len(strVal)-1], " ")
-				sort.Strings(strVals)
-				sort.Strings(test.expectedStrValues)
-				assertDeepEqual(t, test.expectedStrValues, strVals)
-			}
+			assertEqual(t, test.expectedStr, f.Lookup("s2i").Value.String())
 
 			defer assertNoPanic(t)()
 			mustStringToInt := f.MustGetStringToInt("s2i")
