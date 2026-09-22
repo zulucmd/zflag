@@ -11,14 +11,14 @@ import (
 	"github.com/zulucmd/zflag/v2"
 )
 
-const expectedOutput = `      --long-form                 Some description
-      --long-form2                Some description
+const expectedOutput = `      --long-form[=true|false]    Some description
+      --long-form2[=true|false]   Some description
                                     with multiline
-  -s, --long-name                 Some description
+  -s, --long-name[=true|false]    Some description
       --[no-]long-name-negated    Some description
   -l, --[no-]long-name-negated2   Some description with
                                     multiline
-  -t, --long-name2                Some description with
+  -t, --long-name2[=true|false]   Some description with
                                     multiline
 `
 
@@ -60,8 +60,8 @@ func setUpZFlagSet2(buf io.Writer) *zflag.FlagSet {
 const expectedOutput2 = `      --[no-]long-form               Some description
       --[no-]long-form2              Some description
                                        with multiline
-  -s, --long-name                    Some description
-  -t, --long-name2                   Some description with
+  -s, --long-name[=true|false]       Some description
+  -t, --long-name2[=true|false]      Some description with
                                        multiline
   -o, --other-very-long-arg string   Some very long description having
                                      break the limit (default
@@ -79,7 +79,7 @@ func TestPrintUsage_2(t *testing.T) {
 	f := setUpZFlagSet2(&buf)
 	res := f.FlagUsagesWrapped(80)
 	if res != expectedOutput2 {
-		t.Errorf("Expected \n%q \nActual \n%q", expectedOutput2, res)
+		t.Errorf("Expected \n%s \nActual \n%s", expectedOutput2, res)
 	}
 }
 

@@ -1647,7 +1647,7 @@ func TestHiddenFlagUsage(t *testing.T) {
 	}
 }
 
-const defaultOutput = `      --A                     for bootstrapping, allow 'any' type
+const defaultOutput = `      --A[=true|false]        for bootstrapping, allow 'any' type
       --[no-]Alongflagname    disable bounds checking
   -C, --[no-]CCC              a boolean defaulting to true (default true)
       --D path                set relative path for local imports
