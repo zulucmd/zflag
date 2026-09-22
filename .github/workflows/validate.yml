@@ -140,3 +140,27 @@ jobs:
       - name: Run tests
         shell: bash
         run: go test -v -cover -race
+
+  Test-386:
+    needs: DetermineVersion
+    runs-on: ubuntu-latest
+    name: linux/386 Go ${{ needs.DetermineVersion.outputs.go_version }} Tests
+    env:
+      GOARCH: "386"
+      CGO_ENABLED: "0"
+    steps:
+      - name: Setup go
+        run: curl -sL https://raw.githubusercontent.com/maxatome/install-go/v3.3/install-go.pl | perl - ${{ needs.DetermineVersion.outputs.go_version }} $HOME
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - uses: actions/cache@v6
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/Library/Caches/go-build
+            ~/AppData/Local/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ needs.DetermineVersion.outputs.go_version }}-386-${{ hashFiles('**/go.sum') }}
+          restore-keys: go-mod
+      - name: Run tests
+        run: go test -v -cover ./...
