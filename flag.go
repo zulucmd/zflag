@@ -51,7 +51,7 @@ type ParseErrorsAllowList struct {
 	// UnknownFlags will ignore unknown flags errors and continue parsing rest of the flags
 	// See GetUnknownFlags to retrieve collected unknowns.
 	//
-	// Deprecated: Use UnknownFlagsHandling instead
+	// Deprecated: Use UnknownFlagsHandling instead, setting it to IgnoreUnknownFlag.
 	UnknownFlags bool
 
 	// UnknownFlagsHandling decides how to handle unknown flags. Defaults to ErrorOnUnknownFlag.
@@ -354,14 +354,14 @@ func (fs *FlagSet) addUnknownFlag(s string) {
 }
 
 // GetUnknownFlags returns unknown flags in the order they were Parsed.
-// This requires ParseErrorsWhitelist.UnknownFlags to be set so that parsing does
+// This requires ParseErrorsAllowList.UnknownFlagsHandling to be set to IgnoreUnknownFlag so that parsing does
 // not abort on the first unknown flag.
 func (fs *FlagSet) GetUnknownFlags() []string {
 	return fs.unknownFlags
 }
 
 // GetUnknownFlags returns unknown command-line flags in the order they were Parsed.
-// This requires ParseErrorsWhitelist.UnknownFlags to be set so that parsing does
+// This requires ParseErrorsAllowList.UnknownFlagsHandling to be set to IgnoreUnknownFlag so that parsing does
 // not abort on the first unknown flag.
 func GetUnknownFlags() []string {
 	return CommandLine.GetUnknownFlags()
