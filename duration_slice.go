@@ -126,8 +126,8 @@ func (fs *FlagSet) DurationSliceVar(p *[]time.Duration, name string, value []tim
 	fs.Var(newDurationSliceValue(value, p), name, usage, opts...)
 }
 
-// DurationSliceVar defines a duration[] flag with specified name, default value, and usage string.
-// The argument p points to a duration[] variable in which to store the value of the flag.
+// DurationSliceVar defines a []time.Duration flag with specified name, default value, and usage string.
+// The argument p points to a []time.Duration variable in which to store the value of the flag.
 func DurationSliceVar(p *[]time.Duration, name string, value []time.Duration, usage string, opts ...Opt) {
 	CommandLine.DurationSliceVar(p, name, value, usage, opts...)
 }

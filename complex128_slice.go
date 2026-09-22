@@ -129,8 +129,8 @@ func (fs *FlagSet) Complex128SliceVar(p *[]complex128, name string, value []comp
 	fs.Var(newComplex128SliceValue(value, p), name, usage, opts...)
 }
 
-// Complex128SliceVar defines a complex128[] flag with specified name, default value, and usage string.
-// The argument p points to a complex128[] variable in which to store the value of the flag.
+// Complex128SliceVar defines a []complex128 flag with specified name, default value, and usage string.
+// The argument p points to a []complex128 variable in which to store the value of the flag.
 func Complex128SliceVar(p *[]complex128, name string, value []complex128, usage string, opts ...Opt) {
 	CommandLine.Complex128SliceVar(p, name, value, usage, opts...)
 }

@@ -3,7 +3,7 @@
 
 package zflag
 
-// -- int Value
+// -- func Value
 type funcValue func(string) error
 
 var _ Value = (*funcValue)(nil)
@@ -38,7 +38,7 @@ func Func(name string, usage string, fn func(string) error, opts ...Opt) {
 	CommandLine.Func(name, usage, fn, opts...)
 }
 
-// These are not needed for this specific type, and they are added here to stop validate_funcs.sh from fail.
+// These are not needed for this specific type, and they are added here to stop validate_types.sh from fail.
 // func (f *FlagSet) GetFunc(
 // func (f *FlagSet) MustGetFunc(
 // func (f *FlagSet) FuncVar(
