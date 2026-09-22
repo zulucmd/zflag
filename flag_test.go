@@ -831,6 +831,25 @@ func TestFlagSetParse(t *testing.T) {
 	testParse(zflag.NewFlagSet("test", zflag.ContinueOnError), t)
 }
 
+func TestParseRepeated(t *testing.T) {
+	fs := zflag.NewFlagSet("test repeated", zflag.ContinueOnError)
+
+	t.Run("first parse", func(t *testing.T) {
+		assertNoErr(t, fs.Parse([]string{"foo", "bar"}))
+		assertDeepEqual(t, []string{"foo", "bar"}, fs.Args())
+	})
+
+	t.Run("re-parse with fewer args", func(t *testing.T) {
+		assertNoErr(t, fs.Parse([]string{"baz"}))
+		assertDeepEqual(t, []string{"baz"}, fs.Args())
+	})
+
+	t.Run("re-parse with no args", func(t *testing.T) {
+		assertNoErr(t, fs.Parse([]string{}))
+		assertDeepEqual(t, []string{}, fs.Args())
+	})
+}
+
 func TestChangedHelper(t *testing.T) {
 	f := zflag.NewFlagSet("changedtest", zflag.ContinueOnError)
 	f.Bool("changed", false, "changed bool")

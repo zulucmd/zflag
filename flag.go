@@ -1217,11 +1217,11 @@ func (fs *FlagSet) parseAll(arguments []string, fn parseFunc) error {
 	}
 	fs.parsed = true
 
+	fs.args = make([]string, 0, len(arguments))
+
 	if len(arguments) == 0 {
 		return fs.Validate()
 	}
-
-	fs.args = make([]string, 0, len(arguments))
 
 	err := fs.parseArgs(arguments, fn)
 	if err != nil {
