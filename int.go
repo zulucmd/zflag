@@ -23,7 +23,7 @@ func newIntValue(val int, p *int) *intValue {
 
 func (i *intValue) Set(val string) error {
 	val = strings.TrimSpace(val)
-	v, err := strconv.ParseInt(val, 0, 64)
+	v, err := strconv.ParseInt(val, 0, 0)
 	if err != nil {
 		return errors.New("must be an integer")
 	}

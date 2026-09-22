@@ -23,7 +23,7 @@ func newUintValue(val uint, p *uint) *uintValue {
 
 func (i *uintValue) Set(val string) error {
 	val = strings.TrimSpace(val)
-	v, err := strconv.ParseUint(val, 0, 64)
+	v, err := strconv.ParseUint(val, 0, 0)
 	if err != nil {
 		return errors.New("must be a non-negative integer")
 	}
