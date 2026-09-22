@@ -55,15 +55,15 @@ slice flag.Args() or individually as flag.Arg(i).
 The arguments are indexed from 0 through flag.NArg()-1.
 
 The zflag package also defines some new functions that are not in flag,
-that give one-letter shorthands for flags. You can use these by appending
-'P' to the name of any function that defines a flag.
+that give one-letter shorthands for flags. Pass flag.OptShorthand to any
+function that defines a flag.
 
-	var ip = flag.IntP("flagname", "f", 1234, "help message")
+	var ip = flag.Int("flagname", 1234, "help message", flag.OptShorthand('f'))
 	var flagvar bool
 	func init() {
-		flag.BoolVarP(&flagvar, "boolname", "b", true, "help message")
+		flag.BoolVar(&flagvar, "boolname", true, "help message", flag.OptShorthand('b'))
 	}
-	flag.VarP(&flagval, "varname", "v", "help message")
+	flag.Var(&flagval, "varname", "help message", flag.OptShorthand('v'))
 
 Shorthand letters can be used with single dashes on the command line.
 Boolean shorthand flags can be combined with other shorthand flags.
