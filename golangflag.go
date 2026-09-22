@@ -7,6 +7,7 @@ import (
 	goflag "flag"
 	"reflect"
 	"strings"
+	"time"
 	"unicode/utf8"
 )
 
@@ -114,6 +115,38 @@ func (fs *FlagSet) AddGoFlagSet(newSet *goflag.FlagSet) {
 		fs.addedGoFlagSets = make([]*goflag.FlagSet, 0)
 	}
 	fs.addedGoFlagSets = append(fs.addedGoFlagSets, newSet)
+}
+
+// CopyToGoFlagSet adds all current flags to the given Go flag set.
+// Deprecation remarks get copied into the usage description.
+// Whenever possible, a flag gets added for which Go flags shows
+// a proper type in the help message.
+func (fs *FlagSet) CopyToGoFlagSet(newSet *goflag.FlagSet) {
+	fs.VisitAll(func(flag *Flag) {
+		usage := flag.Usage
+		if flag.Deprecated != "" {
+			usage += " (DEPRECATED: " + flag.Deprecated + ")"
+		}
+
+		switch value := flag.Value.(type) {
+		case *stringValue:
+			newSet.StringVar((*string)(value), flag.Name, *(*string)(value), usage)
+		case *intValue:
+			newSet.IntVar((*int)(value), flag.Name, *(*int)(value), usage)
+		case *int64Value:
+			newSet.Int64Var((*int64)(value), flag.Name, *(*int64)(value), usage)
+		case *uintValue:
+			newSet.UintVar((*uint)(value), flag.Name, *(*uint)(value), usage)
+		case *uint64Value:
+			newSet.Uint64Var((*uint64)(value), flag.Name, *(*uint64)(value), usage)
+		case *durationValue:
+			newSet.DurationVar((*time.Duration)(value), flag.Name, *(*time.Duration)(value), usage)
+		case *float64Value:
+			newSet.Float64Var((*float64)(value), flag.Name, *(*float64)(value), usage)
+		default:
+			newSet.Var(flag.Value, flag.Name, usage)
+		}
+	})
 }
 
 // ParseSkippedFlags parses go test flags (the ones starting with "-test.") with the

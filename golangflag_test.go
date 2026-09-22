@@ -6,6 +6,7 @@ package zflag_test
 import (
 	goflag "flag"
 	"testing"
+	"time"
 
 	"github.com/zulucmd/zflag/v2"
 )
@@ -66,4 +67,62 @@ func TestGoflags(t *testing.T) {
 	if !goflag.CommandLine.Parsed() {
 		t.Fatal("goflag.CommandLine.Parsed() return false after f.Parse() called")
 	}
+}
+
+func TestToGoflags(t *testing.T) {
+	pfs := zflag.NewFlagSet("test", zflag.ContinueOnError)
+	gfs := goflag.FlagSet{}
+	pfs.String("StringFlag", "String value", "String flag usage")
+	pfs.Int("IntFlag", 1, "Int flag usage")
+	pfs.Uint("UintFlag", 2, "Uint flag usage")
+	pfs.Int64("Int64Flag", 3, "Int64 flag usage")
+	pfs.Uint64("Uint64Flag", 4, "Uint64 flag usage")
+	pfs.Int8("Int8Flag", 5, "Int8 flag usage")
+	pfs.Float64("Float64Flag", 6.0, "Float64 flag usage")
+	pfs.Duration("DurationFlag", time.Second, "Duration flag usage")
+	pfs.Bool("BoolFlag", true, "Bool flag usage")
+	pfs.String("deprecated", "Deprecated value", "Deprecated flag usage", zflag.OptDeprecated("obsolete"))
+
+	pfs.CopyToGoFlagSet(&gfs)
+
+	// both flag sets share the same values
+	for name, value := range map[string]string{
+		"StringFlag":  "Modified String value",
+		"IntFlag":     "11",
+		"UintFlag":    "12",
+		"Int64Flag":   "13",
+		"Uint64Flag":  "14",
+		"Int8Flag":    "15",
+		"Float64Flag": "16.0",
+		"BoolFlag":    "false",
+	} {
+		pf := pfs.Lookup(name)
+		if pf == nil {
+			t.Errorf("%s: not found in zflag flag set", name)
+			continue
+		}
+		assertNoErr(t, pf.Value.Set(value))
+	}
+
+	pfs.VisitAll(func(pf *zflag.Flag) {
+		gf := gfs.Lookup(pf.Name)
+		if gf == nil {
+			t.Errorf("%s: not found in Go flag set", pf.Name)
+			return
+		}
+		assertEqual(t, pf.Value.String(), gf.Value.String())
+	})
+
+	// every Go flag must come from the zflag flag set
+	gfs.VisitAll(func(gf *goflag.Flag) {
+		if pfs.Lookup(gf.Name) == nil {
+			t.Errorf("%s: not found in zflag flag set", gf.Name)
+		}
+	})
+
+	deprecated := gfs.Lookup("deprecated")
+	if deprecated == nil {
+		t.Fatal("deprecated: not found in Go flag set")
+	}
+	assertEqual(t, "Deprecated flag usage (DEPRECATED: obsolete)", deprecated.Usage)
 }
