@@ -244,7 +244,7 @@ it's shortname "n".
 
 ```go
 // deprecate a flag shorthand by specifying its flag name and a usage message
-flags.Bool("noshorthandflag", false, "this does something", zflag.OptShorthand("n"), zflag.OptShorthandDeprecated("please use --noshorthandflag only"))
+flags.Bool("noshorthandflag", false, "this does something", zflag.OptShorthand('n'), zflag.OptShorthandDeprecated("please use --noshorthandflag only"))
 ```
 
 This hides the shortname "n" from help text, and prints
@@ -289,7 +289,7 @@ It is possible to disable sorting of flags for help and usage message.
 flag.Bool("verbose", false, "verbose output", flag.OptShorthand('v'))
 flag.String("coolflag", "yeaah", "it's really cool flag")
 flag.Int("usefulflag", 777, "sometimes it's very useful")
-flag.SortFlags = false
+flag.CommandLine.SortFlags = false
 flag.PrintDefaults()
 ```
 
@@ -347,8 +347,8 @@ func TestMain(m *testing.M) {
 
 ### Shorthand flags
 
-A flag supporting both long and short formats can be created with any of the
-flag functions suffixed with `P`:
+A flag supporting both long and short formats can be created by passing
+`zflag.OptShorthand` to any of the flag functions:
 
 ```go
 flag.Bool("toggle", false, "toggle help message", zflag.OptShorthand('t'))
@@ -356,11 +356,11 @@ flag.Bool("toggle", false, "toggle help message", zflag.OptShorthand('t'))
 
 ### Shorthand-only flags
 
-A shorthand-only flag can be created with any of the flag functions suffixed
-with `S`:
+A shorthand-only flag can be created by passing `zflag.OptShorthandOnly`
+alongside `zflag.OptShorthand`:
 
 ```go
-flag.String("value", "", "value help message", zflag.OptShorthandOnly('l'))
+flag.String("value", "", "value help message", zflag.OptShorthandOnly(), zflag.OptShorthand('l'))
 ```
 
 This flag can be looked up using it's long name, but will only be parsed when
@@ -369,10 +369,10 @@ the short form is passed.
 ### Unknown flags
 
 Normally zflag will error when an unknown flag is passed, but it's also possible
-to disable that using `FlagSet.ParseErrorsAllowlist.UnknownFlags`:
+to disable that using `FlagSet.ParseErrorsAllowList.UnknownFlagsHandling`:
 
 ```go
-flags.ParseErrorsAllowlist.UnknownFlags = true
+flag.CommandLine.ParseErrorsAllowList.UnknownFlagsHandling = flag.IgnoreUnknownFlag
 flag.Parse()
 ```
 
