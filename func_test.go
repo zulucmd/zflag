@@ -130,3 +130,37 @@ func TestUserDefinedFunc(t *testing.T) {
 		t.Errorf(`error should contain "test error"; got %q`, errMsg)
 	}
 }
+
+func TestFuncUsage(t *testing.T) {
+	tests := []struct {
+		name     string
+		flagName string
+		usage    string
+		expected string
+	}{
+		{
+			name:     "regular func flag",
+			flagName: "flag1",
+			usage:    "usage message",
+			expected: "--flag1 value   usage message",
+		},
+		{
+			name:     "func flag with placeholder name",
+			flagName: "flag2",
+			usage:    "usage message with `name` placeholder",
+			expected: "--flag2 name   usage message with name placeholder",
+		},
+	}
+
+	t.Parallel()
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			f := zflag.NewFlagSet("unittest", zflag.ContinueOnError)
+			f.Func(test.flagName, test.usage, func(string) error { return nil })
+
+			assertEqual(t, test.expected, strings.TrimSpace(f.FlagUsagesWrapped(80)))
+		})
+	}
+}

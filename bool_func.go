@@ -20,7 +20,7 @@ func (i *boolFuncValue) Set(val string) error {
 }
 
 func (i *boolFuncValue) Type() string {
-	return "func"
+	return "boolfunc"
 }
 
 func (i *boolFuncValue) String() string { return "" }

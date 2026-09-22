@@ -32,7 +32,8 @@ func defaultUsageFormatter(flag *Flag) (string, string) {
 	left += flag.Name
 
 	varname, usage := UnquoteUsage(flag)
-	if _, isBoolFlag := flag.Value.(BoolFlag); isBoolFlag && !flag.AddNegative {
+	_, isBoolFunc := flag.Value.(*boolFuncValue)
+	if _, isBoolFlag := flag.Value.(BoolFlag); isBoolFlag && !isBoolFunc && !flag.AddNegative {
 		left += "[=true|false]"
 	} else if varname != "" {
 		left += " " + varname

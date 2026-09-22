@@ -512,7 +512,7 @@ func (fs *FlagSet) PrintDefaults() {
 func (f *Flag) DefaultIsZeroValue() bool {
 	switch f.Value.(type) {
 	case BoolFlag:
-		return f.DefValue == "false"
+		return f.DefValue == "false" || f.DefValue == ""
 	case SliceValue:
 		return f.DefValue == "[]"
 	case *durationValue:
@@ -551,8 +551,10 @@ func UnquoteUsage(flag *Flag) (name string, usage string) {
 		if v, ok := flag.Value.(Typed); ok {
 			name = v.Type()
 			switch name {
-			case "bool":
+			case "bool", "boolfunc":
 				name = ""
+			case "func":
+				name = "value"
 			case "boolSlice":
 				name = "bools"
 			case "complex128":
