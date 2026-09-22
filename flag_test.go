@@ -887,6 +887,18 @@ func TestInvalidArgumentMessages(t *testing.T) {
 			raw:      "soon",
 			want:     `invalid argument "soon" for "--value" flag: must be a duration like "30s" or "5m"`,
 		},
+		{
+			name:     "count",
+			register: func(f *zflag.FlagSet) { f.Count("value", "") },
+			raw:      "x",
+			want:     `invalid argument "x" for "--value" flag: must be an integer`,
+		},
+		{
+			name:     "complex128",
+			register: func(f *zflag.FlagSet) { f.Complex128("value", 0, "") },
+			raw:      "x",
+			want:     `invalid argument "x" for "--value" flag: must be a complex number`,
+		},
 	}
 
 	t.Parallel()

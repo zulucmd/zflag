@@ -60,7 +60,7 @@ func TestCount(t *testing.T) {
 		{
 			name:          "",
 			input:         []string{"-v=a"},
-			expectedErr:   `invalid argument "a" for "-v, --verbose" flag: strconv.ParseInt: parsing "a": invalid syntax`,
+			expectedErr:   `invalid argument "a" for "-v, --verbose" flag: must be an integer`,
 			expectedValue: 0,
 		},
 	}

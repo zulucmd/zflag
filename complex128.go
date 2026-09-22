@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -27,8 +28,11 @@ func (f *complex128Value) Get() interface{} {
 func (f *complex128Value) Set(val string) error {
 	val = strings.TrimSpace(val)
 	v, err := strconv.ParseComplex(val, 128)
+	if err != nil {
+		return errors.New("must be a complex number")
+	}
 	*f = complex128Value(v)
-	return err
+	return nil
 }
 
 func (f *complex128Value) Type() string {

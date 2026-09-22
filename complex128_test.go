@@ -30,19 +30,19 @@ func TestComplex128(t *testing.T) {
 			name:        "empty value passed",
 			input:       repeatFlag("--c128", ""),
 			flagDefault: complex(1, 0),
-			expectedErr: `invalid argument "" for "--c128" flag: strconv.ParseComplex: parsing "": invalid syntax`,
+			expectedErr: `invalid argument "" for "--c128" flag: must be a complex number`,
 		},
 		{
 			name:        "invalid complex128",
 			input:       repeatFlag("--c128", "blabla"),
 			flagDefault: complex(1, 0),
-			expectedErr: `invalid argument "blabla" for "--c128" flag: strconv.ParseComplex: parsing "blabla": invalid syntax`,
+			expectedErr: `invalid argument "blabla" for "--c128" flag: must be a complex number`,
 		},
 		{
 			name:        "no csv",
 			input:       repeatFlag("--c128", "1.0,1.0"),
 			flagDefault: complex(0, 0),
-			expectedErr: `invalid argument "1.0,1.0" for "--c128" flag: strconv.ParseComplex: parsing "1.0,1.0": invalid syntax`,
+			expectedErr: `invalid argument "1.0,1.0" for "--c128" flag: must be a complex number`,
 		},
 		{
 			name:          "accepts separate value without no-",

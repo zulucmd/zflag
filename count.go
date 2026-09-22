@@ -4,6 +4,7 @@
 package zflag
 
 import (
+	"errors"
 	"strconv"
 )
 
@@ -27,9 +28,12 @@ func (i *countValue) Set(val string) error {
 	}
 
 	v, err := strconv.ParseInt(val, 0, 0)
+	if err != nil {
+		return errors.New("must be an integer")
+	}
 	*i = countValue(v)
 
-	return err
+	return nil
 }
 
 func (i *countValue) Get() interface{} {
