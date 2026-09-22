@@ -225,6 +225,102 @@ func TestRemoveFlag(t *testing.T) {
 	})
 }
 
+func TestRemoveFlagUnsorted(t *testing.T) {
+	fs := zflag.NewFlagSet("removing-flags-unsorted", zflag.ContinueOnError)
+	fs.SortFlags = false
+	fs.String("string1", "a", "enter a string1", zflag.OptShorthand('a'))
+	fs.String("string2", "b", "enter a string2", zflag.OptShorthand('b'))
+	fs.String("string3", "c", "enter a string3", zflag.OptGroup("group1"))
+
+	fs.RemoveFlag("string1")
+
+	if flag := fs.Lookup("string1"); flag != nil {
+		t.Errorf("Lookup returned %v for removed flag string1, want nil", flag)
+	}
+	if flag := fs.ShorthandLookup('a'); flag != nil {
+		t.Errorf("ShorthandLookup returned %v for removed shorthand 'a', want nil", flag)
+	}
+
+	visited := make(map[string]bool)
+	fs.VisitAll(func(f *zflag.Flag) {
+		visited[f.Name] = true
+	})
+	if visited["string1"] {
+		t.Errorf("VisitAll visited removed flag string1")
+	}
+	if !visited["string2"] {
+		t.Errorf("VisitAll did not visit remaining flag string2")
+	}
+
+	var buf strings.Builder
+	fs.SetOutput(&buf)
+	fs.PrintDefaults()
+	if strings.Contains(buf.String(), "string1") {
+		t.Errorf("PrintDefaults surfaced removed flag string1:\n%s", buf.String())
+	}
+
+	fs.RemoveFlag("string3")
+	for _, group := range fs.Groups() {
+		if group == "group1" {
+			t.Errorf("Groups surfaced group1 after its only flag was removed")
+		}
+	}
+}
+
+func TestRemoveFlagActualAndSorted(t *testing.T) {
+	t.Run("set then remove", func(t *testing.T) {
+		fs := zflag.NewFlagSet("removing-flags-actual", zflag.ContinueOnError)
+		fs.String("string1", "a", "enter a string1")
+		fs.String("string2", "b", "enter a string2")
+
+		if err := fs.Set("string2", "x"); err != nil {
+			t.Fatalf("Set(string2) failed: %v", err)
+		}
+		if got := fs.NFlag(); got != 1 {
+			t.Fatalf("NFlag() = %d before removal, want 1", got)
+		}
+
+		fs.RemoveFlag("string2")
+
+		if flag := fs.Lookup("string2"); flag != nil {
+			t.Errorf("Lookup returned %v for removed flag string2, want nil", flag)
+		}
+		fs.Visit(func(f *zflag.Flag) {
+			if f.Name == "string2" {
+				t.Errorf("Visit reported removed flag string2")
+			}
+		})
+		for _, f := range fs.GetFlags() {
+			if f.Name == "string2" {
+				t.Errorf("GetFlags contained removed flag string2")
+			}
+		}
+		if got := fs.NFlag(); got != 0 {
+			t.Errorf("NFlag() = %d after removal, want 0", got)
+		}
+	})
+
+	t.Run("sorted remove then add", func(t *testing.T) {
+		fs := zflag.NewFlagSet("removing-flags-sorted", zflag.ContinueOnError)
+		fs.String("a", "", "flag a")
+		fs.String("b", "", "flag b")
+
+		// Populate the sorted cache before mutating the set.
+		_ = fs.GetAllFlags()
+
+		fs.RemoveFlag("a")
+		fs.String("c", "", "flag c")
+
+		var names []string
+		for _, f := range fs.GetAllFlags() {
+			names = append(names, f.Name)
+		}
+		if !reflect.DeepEqual(names, []string{"b", "c"}) {
+			t.Errorf("GetAllFlags() = %v, want [b c]", names)
+		}
+	})
+}
+
 func TestAnnotation(t *testing.T) {
 	f := zflag.NewFlagSet("shorthand", zflag.ContinueOnError)
 
