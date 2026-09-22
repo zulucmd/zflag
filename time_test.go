@@ -5,6 +5,7 @@ package zflag_test
 
 import (
 	"io/ioutil"
+	"strings"
 	"testing"
 	"time"
 
@@ -109,5 +110,32 @@ func TestTime(t *testing.T) {
 			mustTime := f.MustGetTime("st")
 			assertEqual(t, test.expectedValue, mustTime)
 		})
+	}
+}
+
+func usageForTimeFlagSet(t *testing.T, def time.Time) string {
+	t.Helper()
+	var ts time.Time
+	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
+	f.TimeVar(&ts, "time", def, []string{time.RFC3339Nano, time.RFC1123Z}, "Time")
+	assertNoErr(t, f.Parse(nil))
+
+	return f.FlagUsages()
+}
+
+func TestTimeDefaultZero(t *testing.T) {
+	usage := usageForTimeFlagSet(t, time.Time{})
+	if strings.Contains(usage, "default") {
+		t.Errorf("expected no default value in usage, got %q", usage)
+	}
+}
+
+func TestTimeDefaultNonZero(t *testing.T) {
+	usage := usageForTimeFlagSet(t, time.Date(2025, 1, 1, 1, 1, 1, 0, time.UTC))
+	if !strings.Contains(usage, "default") {
+		t.Errorf("expected default value in usage, got %q", usage)
+	}
+	if !strings.Contains(usage, "2025") {
+		t.Errorf("expected default value in usage, got %q", usage)
 	}
 }

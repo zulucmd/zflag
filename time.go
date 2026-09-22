@@ -52,7 +52,12 @@ func (d *TimeValue) Type() string {
 	return "time"
 }
 
-func (d *TimeValue) String() string { return d.Time.Format(time.RFC3339Nano) }
+func (d *TimeValue) String() string {
+	if d.Time.IsZero() {
+		return ""
+	}
+	return d.Time.Format(time.RFC3339Nano)
+}
 
 // GetTime return the time value of a flag with the given name
 func (fs *FlagSet) GetTime(name string) (time.Time, error) {
