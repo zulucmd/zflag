@@ -970,9 +970,34 @@ func (fs *FlagSet) AddFlag(flag *Flag) {
 // RemoveFlag will remove the flag from the FlagSet
 func (fs *FlagSet) RemoveFlag(name string) {
 	normalizedFlagName := fs.normalizeFlagName(name)
-	_, exists := fs.formal[normalizedFlagName]
-	if exists {
-		delete(fs.formal, normalizedFlagName)
+	flag, exists := fs.formal[normalizedFlagName]
+	if !exists {
+		return
+	}
+
+	delete(fs.formal, normalizedFlagName)
+	fs.sortedFormal = fs.sortedFormal[:0]
+
+	for i, f := range fs.orderedFormal {
+		if f == flag {
+			fs.orderedFormal = append(fs.orderedFormal[:i], fs.orderedFormal[i+1:]...)
+			break
+		}
+	}
+
+	if flag.Shorthand != 0 {
+		delete(fs.shorthands, flag.Shorthand)
+	}
+
+	if _, set := fs.actual[normalizedFlagName]; set {
+		delete(fs.actual, normalizedFlagName)
+		fs.sortedActual = fs.sortedActual[:0]
+		for i, f := range fs.orderedActual {
+			if f == flag {
+				fs.orderedActual = append(fs.orderedActual[:i], fs.orderedActual[i+1:]...)
+				break
+			}
+		}
 	}
 }
 
