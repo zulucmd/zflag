@@ -4,6 +4,7 @@
 package zflag_test
 
 import (
+	"fmt"
 	"io/ioutil"
 	"reflect"
 	"testing"
@@ -121,6 +122,11 @@ func TestInt16Slice(t *testing.T) {
 			}
 			if !reflect.DeepEqual(int16SliceGet, int16Slice) {
 				t.Fatalf("expected %[1]v with type %[1]T but got %[2]v with type %[2]T", test.expectedValues, int16SliceGet)
+			}
+
+			expectedString := fmt.Sprintf("%v", test.expectedValues)
+			if got := f.Lookup("i16s").Value.String(); got != expectedString {
+				t.Fatalf("expected String() to be %q, but was %q", expectedString, got)
 			}
 		})
 	}
