@@ -134,6 +134,9 @@ type Value interface {
 	Set(string) error
 }
 
+// Getter is an interface implemented by Values that can return their current
+// value as an interface{}. Use it to read a flag's value without knowing its
+// concrete type.
 type Getter interface {
 	Value
 	Get() interface{}
@@ -169,6 +172,9 @@ type BoolFlag interface {
 	IsBoolFlag() bool
 }
 
+// OptionalValue is an interface implemented by Values that may be supplied
+// without a value argument, such as boolean and count flags. When IsOptional
+// reports true, the flag may appear on its own.
 type OptionalValue interface {
 	Value
 	IsOptional() bool

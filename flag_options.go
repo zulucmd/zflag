@@ -7,6 +7,8 @@ import (
 	"fmt"
 )
 
+// Opt configures a Flag when it is defined. Options are applied in the order
+// they are passed to the flag definition functions.
 type Opt func(f *Flag) error
 
 func applyFlagOptions(f *Flag, options ...Opt) error {
@@ -26,7 +28,7 @@ func OptAddNegative() Opt {
 	}
 }
 
-// OptShorthand one-letter abbreviated flag
+// OptShorthand sets the one-letter shorthand for the flag.
 func OptShorthand(shorthand rune) Opt {
 	return func(f *Flag) error {
 		f.Shorthand = shorthand
@@ -34,7 +36,8 @@ func OptShorthand(shorthand rune) Opt {
 	}
 }
 
-// OptShorthandStr one-letter abbreviated flag
+// OptShorthandStr sets the one-letter shorthand for the flag from a string.
+// It panics if the string is not a single rune.
 func OptShorthandStr(shorthand string) Opt {
 	r, err := shorthandStrToRune(shorthand)
 	if err != nil {
@@ -44,7 +47,8 @@ func OptShorthandStr(shorthand string) Opt {
 	return OptShorthand(r)
 }
 
-// OptShorthandOnly If the user set only the shorthand
+// OptShorthandOnly restricts the flag to its shorthand form, so the long name
+// is not accepted.
 func OptShorthandOnly() Opt {
 	return func(f *Flag) error {
 		f.ShorthandOnly = true
@@ -52,7 +56,7 @@ func OptShorthandOnly() Opt {
 	}
 }
 
-// OptUsage help message
+// OptUsage sets the help message shown for the flag.
 func OptUsage(help string) Opt {
 	return func(f *Flag) error {
 		f.Usage = help
@@ -60,7 +64,7 @@ func OptUsage(help string) Opt {
 	}
 }
 
-// OptUsageType flag type displayed in the help message
+// OptUsageType sets the type name displayed for the flag in the help message.
 func OptUsageType(usageType string) Opt {
 	return func(f *Flag) error {
 		f.UsageType = usageType
@@ -68,7 +72,8 @@ func OptUsageType(usageType string) Opt {
 	}
 }
 
-// OptDisableUnquoteUsage disable unquoting and extraction of type from usage
+// OptDisableUnquoteUsage disables unquoting and extraction of the type from
+// the usage string.
 func OptDisableUnquoteUsage() Opt {
 	return func(f *Flag) error {
 		f.DisableUnquoteUsage = true
@@ -76,7 +81,8 @@ func OptDisableUnquoteUsage() Opt {
 	}
 }
 
-// OptDisablePrintDefault toggle printing of the default value in usage message
+// OptDisablePrintDefault disables printing of the default value in the usage
+// message.
 func OptDisablePrintDefault() Opt {
 	return func(f *Flag) error {
 		f.DisablePrintDefault = true
@@ -84,7 +90,7 @@ func OptDisablePrintDefault() Opt {
 	}
 }
 
-// OptDefValue default value (as text); for usage message
+// OptDefValue sets the default value (as text) shown in the usage message.
 func OptDefValue(defValue string) Opt {
 	return func(f *Flag) error {
 		f.DefValue = defValue
@@ -106,7 +112,7 @@ func OptDeprecated(msg string) Opt {
 	}
 }
 
-// OptHidden used by zulu.Command to allow flags to be hidden from help/usage text
+// OptHidden hides the flag from help and usage text.
 func OptHidden() Opt {
 	return func(f *Flag) error {
 		f.Hidden = true
@@ -114,7 +120,7 @@ func OptHidden() Opt {
 	}
 }
 
-// OptRequired ensures that a flag must be changed
+// OptRequired marks the flag as required, so parsing fails if it is not set.
 func OptRequired() Opt {
 	return func(f *Flag) error {
 		f.Required = true
@@ -122,7 +128,8 @@ func OptRequired() Opt {
 	}
 }
 
-// OptShorthandDeprecated If the shorthand of this flag is deprecated, this string is the new or now thing to use
+// OptShorthandDeprecated marks the flag's shorthand as deprecated and prints
+// msg as the replacement to use.
 func OptShorthandDeprecated(msg string) Opt {
 	return func(f *Flag) error {
 		if msg == "" {
@@ -134,7 +141,7 @@ func OptShorthandDeprecated(msg string) Opt {
 	}
 }
 
-// OptGroup flag group
+// OptGroup assigns the flag to a named group.
 func OptGroup(group string) Opt {
 	return func(f *Flag) error {
 		f.Group = group
@@ -142,7 +149,7 @@ func OptGroup(group string) Opt {
 	}
 }
 
-// OptAnnotation Use it to annotate this specific flag for your application
+// OptAnnotation attaches an application-specific annotation to the flag.
 func OptAnnotation(key string, value []string) Opt {
 	return func(f *Flag) error {
 		f.SetAnnotation(key, value)
