@@ -31,7 +31,7 @@ func (d *durationValue) Set(val string) error {
 	return nil
 }
 
-func (d *durationValue) Get() interface{} {
+func (d *durationValue) Get() any {
 	return time.Duration(*d)
 }
 

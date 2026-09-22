@@ -31,7 +31,7 @@ func (f *float64Value) Set(val string) error {
 	return nil
 }
 
-func (f *float64Value) Get() interface{} {
+func (f *float64Value) Get() any {
 	return float64(*f)
 }
 

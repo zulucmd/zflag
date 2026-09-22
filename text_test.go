@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 	"time"
 
@@ -22,7 +22,7 @@ func assertTimeEqual(t *testing.T, expected, actual time.Time) {
 
 func newTextFlagSet() (*zflag.FlagSet, *time.Time) {
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	ts := new(time.Time)
 	f.TextVar(ts, "time", testDefaultTime, "time stamp")
 	return f, ts
@@ -89,7 +89,7 @@ func TestText(t *testing.T) {
 
 func TestTextConvenience(t *testing.T) {
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	when := f.Text("time", testDefaultTime, "usage").(*time.Time)
 	assertTimeEqual(t, testDefaultTime, *when)
 
@@ -101,7 +101,7 @@ func TestTextErrors(t *testing.T) {
 	var s string
 	var ts time.Time
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.TextVar(&ts, "time", testDefaultTime, "usage")
 	assertNoErr(t, f.Parse(nil))

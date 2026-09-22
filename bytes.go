@@ -22,7 +22,7 @@ func (bytesHex *bytesHexValue) String() string {
 	return fmt.Sprintf("%X", *bytesHex)
 }
 
-func (bytesHex *bytesHexValue) Get() interface{} {
+func (bytesHex *bytesHexValue) Get() any {
 	return []byte(*bytesHex)
 }
 
@@ -107,7 +107,7 @@ func (bytesBase64 *bytesBase64Value) String() string {
 	return base64.StdEncoding.EncodeToString(*bytesBase64)
 }
 
-func (bytesBase64 *bytesBase64Value) Get() interface{} {
+func (bytesBase64 *bytesBase64Value) Get() any {
 	return []byte(*bytesBase64)
 }
 

@@ -28,7 +28,7 @@ func newFloat64SliceValue(val []float64, p *[]float64) *float64SliceValue {
 	return isv
 }
 
-func (s *float64SliceValue) Get() interface{} {
+func (s *float64SliceValue) Get() any {
 	return *s.value
 }
 

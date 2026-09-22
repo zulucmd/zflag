@@ -44,7 +44,7 @@ func (s *durationSliceValue) Set(val string) error {
 	return nil
 }
 
-func (s *durationSliceValue) Get() interface{} {
+func (s *durationSliceValue) Get() any {
 	return *s.value
 }
 

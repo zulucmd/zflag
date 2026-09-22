@@ -23,7 +23,7 @@ func newBoolValue(val bool, p *bool) *boolValue {
 	return (*boolValue)(p)
 }
 
-func (b *boolValue) Get() interface{} {
+func (b *boolValue) Get() any {
 	return bool(*b)
 }
 

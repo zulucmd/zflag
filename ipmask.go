@@ -33,7 +33,7 @@ func (i *ipMaskValue) Set(val string) error {
 	return nil
 }
 
-func (i *ipMaskValue) Get() interface{} {
+func (i *ipMaskValue) Get() any {
 	return net.IPMask(*i)
 }
 

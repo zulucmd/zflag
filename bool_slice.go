@@ -46,7 +46,7 @@ func (s *boolSliceValue) Set(val string) error {
 	return nil
 }
 
-func (s *boolSliceValue) Get() interface{} {
+func (s *boolSliceValue) Get() any {
 	return *s.value
 }
 
