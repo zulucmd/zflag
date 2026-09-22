@@ -120,6 +120,9 @@ func StringToString(name string, value map[string]string, usage string, opts ...
 	return CommandLine.StringToString(name, value, usage, opts...)
 }
 
+// OptMapValueOptional allows map flags to be set with a key alone, without the
+// key=value form. It applies to string-to-string, string-to-int, and
+// string-to-int64 flags.
 func OptMapValueOptional() Opt {
 	return func(f *Flag) error {
 		switch v := f.Value.(type) {

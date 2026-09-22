@@ -43,6 +43,7 @@ func (d *TimeValue) Set(s string) error {
 	return fmt.Errorf("invalid time format '%s' must be one of: %s", s, formatsString)
 }
 
+// Get returns the current time value.
 func (d *TimeValue) Get() interface{} {
 	return *d.Time
 }
@@ -52,6 +53,8 @@ func (d *TimeValue) Type() string {
 	return "time"
 }
 
+// String returns the time formatted as RFC3339Nano, or an empty string if the
+// time is zero.
 func (d *TimeValue) String() string {
 	if d.Time.IsZero() {
 		return ""
