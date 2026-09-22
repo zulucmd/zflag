@@ -680,6 +680,99 @@ func testParseWithUnknownFlags(f *zflag.FlagSet, t *testing.T) {
 	}
 }
 
+func testParseWithUnknownFlagsAndPassToArgs(f *zflag.FlagSet, t *testing.T) {
+	if f.Parsed() {
+		t.Error("f.Parse() = true before Parse")
+	}
+	f.ParseErrorsAllowList.UnknownFlagsHandling = zflag.PassUnknownFlagToArgs
+	f.SetInterspersed(true)
+
+	f.Bool("boola", false, "bool value", zflag.OptShorthand('a'))
+	f.Bool("boolb", false, "bool2 value", zflag.OptShorthand('b'))
+	f.Bool("boolc", false, "bool3 value", zflag.OptShorthand('c'))
+	f.Bool("boold", false, "bool4 value", zflag.OptShorthand('d'))
+	f.Bool("boole", false, "bool4 value", zflag.OptShorthand('e'))
+	f.String("stringa", "0", "string value", zflag.OptShorthand('s'))
+	f.String("stringz", "0", "string value", zflag.OptShorthand('z'))
+	f.String("stringy", "0", "string value", zflag.OptShorthand('y'))
+	f.String("stringo", "0", "string value", zflag.OptShorthand('o'))
+	args := []string{
+		"-ab",
+		// -f and -g is unknown
+		"-fcgs=xx",
+		"--stringz=something",
+		"--unknown1",
+		"unknown1Value",
+		"-d=true",
+		"--unknown2=unknown2Value",
+		"-u=unknown3Value",
+		"-p",
+		"unknown4Value",
+		"-q", // another unknown with bool value
+		"-y",
+		"ee",
+		"--unknown7=unknown7value",
+		"--stringo=ovalue",
+		"--unknown8=unknown8value",
+		"--boole",
+		"--unknown6",
+		"",
+		"-uuuuu",
+		"",
+		"--unknown10",
+		"--unknown11",
+		"arg0",
+		"arg1",
+	}
+	want := []string{
+		"boola",
+		"boolb",
+		"boolc",
+		"stringa", "xx",
+		"stringz", "something",
+		"boold", "true",
+		"stringy", "ee",
+		"stringo", "ovalue",
+		"boole", "true",
+	}
+	wantArgs := []string{
+		"-fg",
+		"--unknown1",
+		"unknown1Value",
+		"--unknown2=unknown2Value",
+		"-u=unknown3Value",
+		"-p",
+		"unknown4Value",
+		"-q", // another unknown with bool value
+		"--unknown7=unknown7value",
+		"--unknown8=unknown8value",
+		"--unknown6",
+		"",
+		"-uuuuu",
+		"",
+		"--unknown10",
+		"--unknown11",
+		"arg0",
+		"arg1",
+	}
+	got := []string{}
+	store := func(flag *zflag.Flag, value string) error {
+		got = append(got, flag.Name)
+		if len(value) > 0 {
+			got = append(got, value)
+		}
+		return nil
+	}
+	if err := f.ParseAll(args, store); err != nil {
+		t.Errorf("expected no error, got %s", err)
+	}
+	if !f.Parsed() {
+		t.Errorf("f.Parsed() = false after Parse")
+	}
+	assertDeepEqual(t, want, got)
+	assertDeepEqual(t, wantArgs, f.Args())
+}
+
 func TestShorthand(t *testing.T) {
 	f := zflag.NewFlagSet("shorthand", zflag.ContinueOnError)
 	if f.Parsed() {
@@ -825,6 +918,11 @@ func TestParseAll(t *testing.T) {
 func TestIgnoreUnknownFlags(t *testing.T) {
 	zflag.ResetForTesting(func() { t.Error("bad parse") })
 	testParseWithUnknownFlags(zflag.CommandLine, t)
+}
+
+func TestIgnoreUnknownFlagsAndPassToArgs(t *testing.T) {
+	zflag.ResetForTesting(func() { t.Error("bad parse") })
+	testParseWithUnknownFlagsAndPassToArgs(zflag.CommandLine, t)
 }
 
 func TestFlagSetParse(t *testing.T) {
