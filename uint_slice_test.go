@@ -70,6 +70,22 @@ func TestUintSlice(t *testing.T) {
 			expectedValues: []uint{1, 2, 3},
 		},
 		{
+			name:           "hex values",
+			input:          []string{"0x1", "0x2", "0x10"},
+			flagDefault:    []uint{},
+			expectedValues: []uint{1, 2, 16},
+		},
+		{
+			name:  "append hex value",
+			input: []string{"0x1"},
+			visitor: func(f *zflag.Flag) {
+				if val, ok := f.Value.(zflag.SliceValue); ok {
+					_ = val.Append("0x10")
+				}
+			},
+			expectedValues: []uint{1, 16},
+		},
+		{
 			name:  "replace values",
 			input: []string{"5", "1"},
 			visitor: func(f *zflag.Flag) {
