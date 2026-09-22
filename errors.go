@@ -60,7 +60,7 @@ func (e MissingFlagsError) Error() string {
 // validated.
 type InvalidArgumentError struct {
 	flagName string
-	value    interface{}
+	value    any
 	err      error
 }
 
@@ -68,7 +68,7 @@ var _ error = (*InvalidArgumentError)(nil)
 
 // NewInvalidArgumentError returns an error describing why the given value is
 // invalid for the flag.
-func NewInvalidArgumentError(err error, f *Flag, value interface{}) error {
+func NewInvalidArgumentError(err error, f *Flag, value any) error {
 	var flagName string
 	if f.Shorthand != 0 && f.ShorthandDeprecated == "" {
 		flagName = fmt.Sprintf("-%c", f.Shorthand)

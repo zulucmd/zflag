@@ -31,7 +31,7 @@ func (f *float32Value) Set(val string) error {
 	return nil
 }
 
-func (f *float32Value) Get() interface{} {
+func (f *float32Value) Get() any {
 	return float32(*f)
 }
 

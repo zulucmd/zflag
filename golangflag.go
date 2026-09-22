@@ -60,7 +60,7 @@ func (v *flagValueWrapper) Set(val string) error {
 	return v.inner.Set(val)
 }
 
-func (v *flagValueWrapper) Get() interface{} {
+func (v *flagValueWrapper) Get() any {
 	if getter, ok := v.inner.(goflag.Getter); ok {
 		return getter.Get()
 	}

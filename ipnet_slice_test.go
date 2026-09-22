@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net"
 	"reflect"
 	"strings"
@@ -100,7 +100,7 @@ func TestIPNetSlice(t *testing.T) {
 			t.Parallel()
 			var cidrs []net.IPNet
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.IPNetSliceVar(&cidrs, "cidr", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--cidr", test.input...))
 			if test.expectedErr != "" {

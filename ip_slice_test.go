@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net"
 	"reflect"
 	"strings"
@@ -88,7 +88,7 @@ func TestIPSlice(t *testing.T) {
 			t.Parallel()
 			var ips []net.IP
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.IPSliceVar(&ips, "ips", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--ips", test.input...))
 			if test.expectedErr != "" {
@@ -136,7 +136,7 @@ func setUpIPSliceValue(t *testing.T, def []net.IP) (*[]net.IP, zflag.SliceValue)
 	t.Helper()
 	var ips []net.IP
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.IPSliceVar(&ips, "ips", def, "usage")
 	assertNoErr(t, f.Parse(nil))
 

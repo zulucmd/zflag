@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -148,7 +148,7 @@ func TestBoolSlice(t *testing.T) {
 			t.Parallel()
 			var bs []bool
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.BoolSliceVar(&bs, "bs", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--bs", test.input...))
 			if test.expectedErr != "" {
@@ -190,7 +190,7 @@ func TestBoolSliceErrors(t *testing.T) {
 	var s string
 	var bs []bool
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.BoolSliceVar(&bs, "bs", []bool{}, "usage")
 	err := f.Parse([]string{})

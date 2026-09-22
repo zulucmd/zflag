@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -148,7 +148,7 @@ func TestC128Slice(t *testing.T) {
 			t.Parallel()
 			var c128s []complex128
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.Complex128SliceVar(&c128s, "c128s", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--c128s", test.input...))
 			if test.expectedErr != "" {
@@ -188,7 +188,7 @@ func TestComplex128SliceErrors(t *testing.T) {
 	var s string
 	var c128s []complex128
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.Complex128SliceVar(&c128s, "c128s", []complex128{}, "usage")
 	err := f.Parse([]string{})

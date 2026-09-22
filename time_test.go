@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"strings"
 	"testing"
 	"time"
@@ -84,7 +84,7 @@ func TestTime(t *testing.T) {
 			t.Parallel()
 			var st time.Time
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			formats := test.formats
 			if len(formats) == 0 {
 				formats = []string{time.RFC3339Nano}

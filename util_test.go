@@ -18,19 +18,19 @@ func repeatFlag(flag string, values ...string) (res []string) {
 	return
 }
 
-func assertDeepEqual(t *testing.T, expected, actual interface{}) {
+func assertDeepEqual(t *testing.T, expected, actual any) {
 	t.Helper()
 	if !reflect.DeepEqual(expected, actual) {
 		t.Errorf("expected %[1]v with type %[1]T but got %[2]v with type %[2]T", expected, actual)
 	}
 }
 
-func assertEqual(t *testing.T, expected, actual interface{}) {
+func assertEqual(t *testing.T, expected, actual any) {
 	t.Helper()
 	assertEqualf(t, expected, actual, "expected %[1]v with type %[1]T but got %[2]v with type %[2]T", expected, actual)
 }
 
-func assertEqualf(t *testing.T, expected, actual interface{}, msg string, fmt ...interface{}) {
+func assertEqualf(t *testing.T, expected, actual any, msg string, fmt ...any) {
 	t.Helper()
 	if expected != actual {
 		t.Errorf(msg, fmt...)
@@ -77,7 +77,7 @@ func assertErrMsg(t *testing.T, expectedErrMsg string, err error) {
 	}
 }
 
-func assertNotNilf(t *testing.T, value interface{}, msg string, fmt ...interface{}) {
+func assertNotNilf(t *testing.T, value any, msg string, fmt ...any) {
 	t.Helper()
 	if value == nil {
 		t.Fatalf(msg, fmt...)

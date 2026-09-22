@@ -28,7 +28,7 @@ func newUint8SliceValue(val []uint8, p *[]uint8) *uint8SliceValue {
 	return isv
 }
 
-func (s *uint8SliceValue) Get() interface{} {
+func (s *uint8SliceValue) Get() any {
 	return *s.value
 }
 

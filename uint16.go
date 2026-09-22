@@ -31,7 +31,7 @@ func (i *uint16Value) Set(val string) error {
 	return nil
 }
 
-func (i *uint16Value) Get() interface{} {
+func (i *uint16Value) Get() any {
 	return uint16(*i)
 }
 

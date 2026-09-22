@@ -6,7 +6,6 @@ package zflag_test
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"os"
 	"os/exec"
@@ -893,7 +892,7 @@ func TestShorthand(t *testing.T) {
 		"--",
 		notaflag,
 	}
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	if err := f.Parse(args); err != nil {
 		t.Error("expected no error, got", err)
 	}
@@ -936,7 +935,7 @@ func TestShorthand(t *testing.T) {
 
 func TestShorthandOnly(t *testing.T) {
 	f := zflag.NewFlagSet("shorthand", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	if f.Parsed() {
 		t.Error("f.Parse() = true before Parse")
 	}
@@ -966,7 +965,7 @@ func TestShorthandLookup(t *testing.T) {
 	args := []string{
 		"-ab",
 	}
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	err := f.Parse(args)
 	assertNoErr(t, err)
 	if !f.Parsed() {
@@ -1101,7 +1100,7 @@ func TestInvalidArgumentMessages(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			test.register(f)
 			assertErrMsg(t, test.want, f.Parse([]string{"--value=" + test.raw}))
 		})
@@ -1652,7 +1651,7 @@ func TestTermination(t *testing.T) {
 		arg1,
 		arg2,
 	}
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	if err := f.Parse(args); err != nil {
 		t.Fatal("expected no error; got ", err)
 	}
