@@ -606,7 +606,9 @@ func unquoteBacktickFromUsage(name string, usage string) (string, string) {
 // Splits the string `s` on whitespace into an initial substring up to
 // `i` runes in length and the remainder. Will go `slop` over `i` if
 // that encompasses the entire string (which allows the caller to
-// avoid short orphan words on the final line).
+// avoid short orphan words on the final line). If the next word is
+// wider than `i`, it is returned on its own and wrapping continues
+// after it.
 func wrapN(i, slop int, s string) (string, string) {
 	if i+slop > len(s) {
 		return s, ""
@@ -614,7 +616,11 @@ func wrapN(i, slop int, s string) (string, string) {
 
 	w := strings.LastIndexAny(s[:i], " \t\n")
 	if w <= 0 {
-		return s, ""
+		next := strings.IndexAny(s, " \t\n")
+		if next <= 0 {
+			return s, ""
+		}
+		return s[:next], s[next+1:]
 	}
 	nlPos := strings.LastIndex(s[:i], "\n")
 	if nlPos > 0 && nlPos < w {
