@@ -68,7 +68,7 @@ func (s *stringToStringValue) String() string {
 	}
 	sort.Strings(keys)
 
-	records := make([]string, 0, len(*s.value)>>1)
+	records := make([]string, 0, len(*s.value))
 	for _, k := range keys {
 		records = append(records, k+"="+strconv.Quote((*s.value)[k]))
 	}

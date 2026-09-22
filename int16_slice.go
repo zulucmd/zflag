@@ -57,7 +57,7 @@ func (s *int16SliceValue) String() string {
 		return "[]"
 	}
 
-	return fmt.Sprintf("%d", s.value)
+	return fmt.Sprintf("%d", *s.value)
 }
 
 func (s *int16SliceValue) fromString(val string) (int16, error) {

@@ -39,9 +39,6 @@ func (s *ipNetSliceValue) Set(val string) error {
 	if err != nil {
 		return fmt.Errorf("invalid string being converted to CIDR: %s", val)
 	}
-	if n == nil {
-		return fmt.Errorf("invalid string being converted to CIDR: %s", val)
-	}
 
 	if !s.changed {
 		*s.value = []net.IPNet{*n}

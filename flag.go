@@ -1136,7 +1136,7 @@ func (fs *FlagSet) parseLongArg(s string, args []string, fn parseFunc) (outArgs 
 		value = fmt.Sprintf("%t", !hasNoPrefix)
 	case isOptional: // '--flag' (arg was optional)
 		value = ""
-	case nextArgIsFlagValue && (!flagIsBool || (flagIsBool && isBool(outArgs[0]))): // '--flag arg'
+	case nextArgIsFlagValue && (!flagIsBool || isBool(outArgs[0])): // '--flag arg'
 		value = outArgs[0]
 		outArgs = outArgs[1:]
 	default: // '--flag' (arg was required)
@@ -1226,11 +1226,11 @@ func (fs *FlagSet) parseSingleShortArg(shorthands string, args []string, fn pars
 		// '-f=arg'
 		value = shorthands[2:]
 		outShorts = ""
-	case nextShortArgIsFlagValue && (!flagIsBool || (flagIsBool && isBool(shorthands[1:]))):
+	case nextShortArgIsFlagValue && (!flagIsBool || isBool(shorthands[1:])):
 		// '-farg'
 		value = shorthands[1:]
 		outShorts = ""
-	case nextArgIsFlagValue && (!flagIsBool || (flagIsBool && isBool(outArgs[0]))):
+	case nextArgIsFlagValue && (!flagIsBool || isBool(outArgs[0])):
 		// '-f arg'
 		value = args[0]
 		outArgs = args[1:]
