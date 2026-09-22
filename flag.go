@@ -1203,7 +1203,10 @@ func (fs *FlagSet) parseSingleShortArg(shorthands string, args []string, fn pars
 		// '-f arg'
 		value = args[0]
 		outArgs = args[1:]
-	case flagIsBool, isOptional:
+	case flagIsBool:
+		// '-f' (bool flag)
+		value = "true"
+	case isOptional:
 		// '-f' (arg was optional)
 		value = ""
 	default:

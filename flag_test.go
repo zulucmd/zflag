@@ -560,9 +560,9 @@ func testParseAll(f *zflag.FlagSet, t *testing.T) {
 		"ee",
 	}
 	want := []string{
-		"boola",
-		"boolb",
-		"boolc",
+		"boola", "true",
+		"boolb", "true",
+		"boolc", "true",
 		"stringa", "xx",
 		"stringz", "something",
 		"boold", "true",
@@ -630,9 +630,9 @@ func testParseWithUnknownFlags(f *zflag.FlagSet, t *testing.T) {
 		"--unknown11",
 	}
 	want := []string{
-		"boola",
-		"boolb",
-		"boolc",
+		"boola", "true",
+		"boolb", "true",
+		"boolc", "true",
 		"stringa", "xx",
 		"stringz", "something",
 		"boold", "true",
@@ -725,9 +725,9 @@ func testParseWithUnknownFlagsAndPassToArgs(f *zflag.FlagSet, t *testing.T) {
 		"arg1",
 	}
 	want := []string{
-		"boola",
-		"boolb",
-		"boolc",
+		"boola", "true",
+		"boolb", "true",
+		"boolc", "true",
 		"stringa", "xx",
 		"stringz", "something",
 		"boold", "true",

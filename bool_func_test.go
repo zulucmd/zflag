@@ -12,9 +12,9 @@ import (
 )
 
 func TestBoolFunc(t *testing.T) {
-	var count int
-	fn := func(_ string) error {
-		count++
+	var got []string
+	fn := func(s string) error {
+		got = append(got, s)
 		return nil
 	}
 
@@ -22,13 +22,13 @@ func TestBoolFunc(t *testing.T) {
 	f.BoolFunc("func", "Callback function", fn)
 
 	assertNoErr(t, f.Parse([]string{"--func", "--func=1", "--func=false"}))
-	assertEqual(t, 3, count)
+	assertDeepEqual(t, []string{"true", "1", "false"}, got)
 }
 
 func TestBoolFuncShorthand(t *testing.T) {
-	var count int
-	fn := func(_ string) error {
-		count++
+	var got []string
+	fn := func(s string) error {
+		got = append(got, s)
 		return nil
 	}
 
@@ -36,7 +36,7 @@ func TestBoolFuncShorthand(t *testing.T) {
 	f.BoolFunc("bfunc", "Callback function", fn, zflag.OptShorthand('b'))
 
 	assertNoErr(t, f.Parse([]string{"--bfunc", "--bfunc=0", "--bfunc=false", "-b", "-b=0"}))
-	assertEqual(t, 5, count)
+	assertDeepEqual(t, []string{"true", "0", "false", "true", "0"}, got)
 }
 
 func TestBoolFuncError(t *testing.T) {
