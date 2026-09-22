@@ -131,3 +131,68 @@ func TestIPSlice(t *testing.T) {
 		})
 	}
 }
+
+func setUpIPSliceValue(t *testing.T, def []net.IP) (*[]net.IP, zflag.SliceValue) {
+	t.Helper()
+	var ips []net.IP
+	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
+	f.SetOutput(ioutil.Discard)
+	f.IPSliceVar(&ips, "ips", def, "usage")
+	assertNoErr(t, f.Parse(nil))
+
+	value, ok := f.Lookup("ips").Value.(zflag.SliceValue)
+	if !ok {
+		t.Fatal("flag value does not implement SliceValue")
+	}
+	return &ips, value
+}
+
+func TestIPSliceValueRejectsInvalidIPs(t *testing.T) {
+	tests := []struct {
+		name           string
+		operation      func(zflag.SliceValue) error
+		expectedErrMsg string
+	}{
+		{
+			name:           "append",
+			operation:      func(v zflag.SliceValue) error { return v.Append("not-an-ip") },
+			expectedErrMsg: "invalid string being converted to IP address: not-an-ip",
+		},
+		{
+			name:           "replace",
+			operation:      func(v zflag.SliceValue) error { return v.Replace([]string{"2001:db8::1", "not-an-ip"}) },
+			expectedErrMsg: "invalid string being converted to IP address: not-an-ip",
+		},
+	}
+
+	t.Parallel()
+	for _, test := range tests {
+		test := test
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			t.Run("returns error", func(t *testing.T) {
+				t.Parallel()
+				_, value := setUpIPSliceValue(t, []net.IP{net.ParseIP("192.0.2.1")})
+				assertErrMsg(t, test.expectedErrMsg, test.operation(value))
+			})
+
+			t.Run("leaves value unchanged", func(t *testing.T) {
+				t.Parallel()
+				ips, value := setUpIPSliceValue(t, []net.IP{net.ParseIP("192.0.2.1")})
+				_ = test.operation(value)
+				assertDeepEqual(t, []net.IP{net.ParseIP("192.0.2.1")}, *ips)
+			})
+		})
+	}
+}
+
+func TestIPSliceValueAppendAndReplace(t *testing.T) {
+	ips, value := setUpIPSliceValue(t, nil)
+
+	assertNoErr(t, value.Append(" 192.0.2.1 "))
+	assertDeepEqual(t, []net.IP{net.ParseIP("192.0.2.1")}, *ips)
+
+	assertNoErr(t, value.Replace([]string{" 2001:db8::1 "}))
+	assertDeepEqual(t, []net.IP{net.ParseIP("2001:db8::1")}, *ips)
+}
