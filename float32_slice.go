@@ -126,8 +126,8 @@ func (fs *FlagSet) Float32SliceVar(p *[]float32, name string, value []float32, u
 	fs.Var(newFloat32SliceValue(value, p), name, usage, opts...)
 }
 
-// Float32SliceVar defines a float32[] flag with specified name, default value, and usage string.
-// The argument p points to a float32[] variable in which to store the value of the flag.
+// Float32SliceVar defines a []float32 flag with specified name, default value, and usage string.
+// The argument p points to a []float32 variable in which to store the value of the flag.
 func Float32SliceVar(p *[]float32, name string, value []float32, usage string, opts ...Opt) {
 	CommandLine.Float32SliceVar(p, name, value, usage, opts...)
 }
