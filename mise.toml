@@ -20,3 +20,17 @@ run = "go test ./..."
 [tasks.check]
 description = "Run every prek hook against all files"
 run = "prek run --all-files"
+
+[tasks.unittest]
+description = "Run the unit test suite with race detection and coverage"
+run = """
+if command -v richgo >/dev/null 2>&1; then
+  richgo test -failfast -v -race -cover
+else
+  go test -failfast -v -race -cover
+fi
+"""
+
+[tasks.clean]
+description = "Remove the cloned zulu checkout"
+run = "rm -rf zulu"
