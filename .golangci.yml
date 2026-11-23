@@ -32,6 +32,13 @@ issues:
     - path: doc.go
       linters:
         - goheader
+    # flag.go declares a local variable named `max`, which shadows the Go 1.21
+    # builtin now that go.mod targets 1.23. Renaming it is a follow-up: flag.go
+    # is held by an open PR, so the rule is excluded here until that lands.
+    - path: flag\.go
+      linters:
+        - revive
+      text: redefines-builtin-id
 
 linters-settings:
   goheader:

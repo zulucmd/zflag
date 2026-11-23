@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -106,7 +106,7 @@ func TestStringToString(t *testing.T) {
 			t.Parallel()
 			var s2s map[string]string
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.StringToStringVar(&s2s, "s2s", test.flagDefault, "usage", test.flagOpts...)
 			err := f.Parse(repeatFlag("--s2s", test.input...))
 			if test.expectedErr != "" {
@@ -146,7 +146,7 @@ func TestStringToStringErrors(t *testing.T) {
 	var s string
 	var s2s map[string]string
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.StringToStringVar(&s2s, "s2s", map[string]string{}, "usage")
 	err := f.Parse([]string{})

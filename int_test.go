@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"strconv"
 	"testing"
 
@@ -52,7 +52,7 @@ func TestInt(t *testing.T) {
 			t.Parallel()
 			var i int
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.IntVar(&i, "int", 0, "usage")
 			err := f.Parse(repeatFlag("--int", test.input...))
 			if test.expectedErr != "" {
@@ -87,7 +87,7 @@ func TestIntOutOfRangeOn32Bit(t *testing.T) {
 
 	var i int
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.IntVar(&i, "int", 0, "usage")
 
 	// 2^31 does not fit in a 32-bit int.

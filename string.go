@@ -20,7 +20,7 @@ func (s *stringValue) Set(val string) error {
 	return nil
 }
 
-func (s *stringValue) Get() interface{} {
+func (s *stringValue) Get() any {
 	return string(*s)
 }
 

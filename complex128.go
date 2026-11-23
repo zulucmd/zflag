@@ -21,7 +21,7 @@ func newComplex128Value(val complex128, p *complex128) *complex128Value {
 	return (*complex128Value)(p)
 }
 
-func (f *complex128Value) Get() interface{} {
+func (f *complex128Value) Get() any {
 	return complex128(*f)
 }
 

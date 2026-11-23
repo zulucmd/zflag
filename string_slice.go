@@ -35,7 +35,7 @@ func (s *stringSliceValue) Set(val string) error {
 	return nil
 }
 
-func (s *stringSliceValue) Get() interface{} {
+func (s *stringSliceValue) Get() any {
 	return *s.value
 }
 

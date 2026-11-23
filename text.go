@@ -36,7 +36,7 @@ func (t *textValue) Set(val string) error {
 	return t.p.UnmarshalText([]byte(val))
 }
 
-func (t *textValue) Get() interface{} {
+func (t *textValue) Get() any {
 	return t.p
 }
 

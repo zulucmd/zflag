@@ -47,7 +47,7 @@ func (s *ipSliceValue) Set(val string) error {
 	return nil
 }
 
-func (s *ipSliceValue) Get() interface{} {
+func (s *ipSliceValue) Get() any {
 	return *s.value
 }
 

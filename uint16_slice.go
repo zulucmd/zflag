@@ -28,7 +28,7 @@ func newUint16SliceValue(val []uint16, p *[]uint16) *uint16SliceValue {
 	return isv
 }
 
-func (s *uint16SliceValue) Get() interface{} {
+func (s *uint16SliceValue) Get() any {
 	return *s.value
 }
 

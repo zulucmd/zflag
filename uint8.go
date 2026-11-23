@@ -31,7 +31,7 @@ func (i *uint8Value) Set(val string) error {
 	return nil
 }
 
-func (i *uint8Value) Get() interface{} {
+func (i *uint8Value) Get() any {
 	return uint8(*i)
 }
 

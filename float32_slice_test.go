@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"reflect"
 	"testing"
 
@@ -82,7 +82,7 @@ func TestFloat32Slice(t *testing.T) {
 			t.Parallel()
 			var f32s []float32
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.Float32SliceVar(&f32s, "f32s", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--f32s", test.input...))
 			if test.expectedErr != "" {

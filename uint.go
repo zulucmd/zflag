@@ -31,7 +31,7 @@ func (i *uintValue) Set(val string) error {
 	return nil
 }
 
-func (i *uintValue) Get() interface{} {
+func (i *uintValue) Get() any {
 	return uint(*i)
 }
 

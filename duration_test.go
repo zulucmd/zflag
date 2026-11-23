@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 	"time"
 
@@ -66,7 +66,7 @@ func TestDuration(t *testing.T) {
 			t.Parallel()
 			var dur time.Duration
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.DurationVar(&dur, "dur", test.flagDefault, "usage", test.extraOpts...)
 			err := f.Parse(test.input)
 			if test.expectedErr != "" {
@@ -97,7 +97,7 @@ func TestDurationErrors(t *testing.T) {
 	var s string
 	var dur time.Duration
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.DurationVar(&dur, "dur", time.Minute, "usage")
 	err := f.Parse([]string{})

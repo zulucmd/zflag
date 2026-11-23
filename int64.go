@@ -31,7 +31,7 @@ func (i *int64Value) Set(val string) error {
 	return nil
 }
 
-func (i *int64Value) Get() interface{} {
+func (i *int64Value) Get() any {
 	return int64(*i)
 }
 

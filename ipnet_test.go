@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net"
 	"reflect"
 	"strings"
@@ -164,7 +164,7 @@ func TestIPNet(t *testing.T) {
 			t.Parallel()
 			var ip net.IPNet
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.IPNetVar(&ip, "ip", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--ip", test.input...))
 			if test.expectedErr != "" {

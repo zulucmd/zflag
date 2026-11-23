@@ -58,6 +58,9 @@ jobs:
           restore-keys: go-mod
       - name: Setup mdtoc
         run: go install sigs.k8s.io/mdtoc@v1.1.0
+        env:
+          GOPROXY: https://proxy.golang.org,direct
+          GOSUMDB: sum.golang.org
       - uses: j178/prek-action@v3.0.0
         env:
           PREK_SKIP: golangci-lint,go-build,go-unit-tests

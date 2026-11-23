@@ -35,7 +35,7 @@ func (i *ipValue) Set(val string) error {
 	return nil
 }
 
-func (i *ipValue) Get() interface{} {
+func (i *ipValue) Get() any {
 	return net.IP(*i)
 }
 

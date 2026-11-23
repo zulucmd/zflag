@@ -44,7 +44,7 @@ func (d *TimeValue) Set(s string) error {
 }
 
 // Get returns the current time value.
-func (d *TimeValue) Get() interface{} {
+func (d *TimeValue) Get() any {
 	return *d.Time
 }
 

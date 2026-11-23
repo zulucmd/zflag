@@ -36,7 +36,7 @@ func (i *countValue) Set(val string) error {
 	return nil
 }
 
-func (i *countValue) Get() interface{} {
+func (i *countValue) Get() any {
 	return int(*i)
 }
 

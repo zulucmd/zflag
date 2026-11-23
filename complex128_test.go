@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -76,7 +76,7 @@ func TestComplex128(t *testing.T) {
 			t.Parallel()
 			var c128 complex128
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.Complex128Var(&c128, "c128", test.flagDefault, "usage", test.extraOpts...)
 			err := f.Parse(test.input)
 			if test.expectedErr != "" {
@@ -105,7 +105,7 @@ func TestComplex128Errors(t *testing.T) {
 	var s string
 	var c128 complex128
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.Complex128Var(&c128, "c128", complex(1, 0), "usage")
 	err := f.Parse([]string{})

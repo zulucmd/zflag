@@ -5,7 +5,7 @@ package zflag_test
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -103,7 +103,7 @@ func TestBytesHex(t *testing.T) {
 			t.Parallel()
 			var bytes []byte
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.BytesHexVar(&bytes, "bytes", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--bytes", test.input...))
 			if test.expectedErr != "" {
@@ -135,7 +135,7 @@ func TestBytesHexErrors(t *testing.T) {
 	var s string
 	var b []byte
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.BytesHexVar(&b, "b", []byte{}, "usage")
 	err := f.Parse([]string{})
@@ -229,7 +229,7 @@ func TestBytesB64(t *testing.T) {
 			t.Parallel()
 			var bytes []byte
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.BytesBase64Var(&bytes, "bytes", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--bytes", test.input...))
 			if test.expectedErr != "" {
@@ -263,7 +263,7 @@ func TestBytesBase64Errors(t *testing.T) {
 	var s bool
 	var b []byte
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.BoolVar(&s, "s", false, "usage")
 	f.BytesBase64Var(&b, "b", []byte{}, "usage")
 	err := f.Parse([]string{})

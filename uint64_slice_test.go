@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"reflect"
 	"testing"
 
@@ -88,7 +88,7 @@ func TestUint64Slice(t *testing.T) {
 			t.Parallel()
 			var ui64s []uint64
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.Uint64SliceVar(&ui64s, "ui64s", test.flagDefault, "usage")
 			err := f.Parse(repeatFlag("--ui64s", test.input...))
 			if test.expectedErr != "" {

@@ -4,7 +4,7 @@
 package zflag_test
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 
 	"github.com/zulucmd/zflag/v2"
@@ -72,7 +72,7 @@ func TestCount(t *testing.T) {
 			t.Parallel()
 			var verbose int
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-			f.SetOutput(ioutil.Discard)
+			f.SetOutput(io.Discard)
 			f.CountVar(&verbose, "verbose", "usage", zflag.OptShorthand('v'))
 			err := f.Parse(test.input)
 			if test.expectedErr != "" {
@@ -103,7 +103,7 @@ func TestCountErrors(t *testing.T) {
 	var s string
 	var count int
 	f := zflag.NewFlagSet("test", zflag.ContinueOnError)
-	f.SetOutput(ioutil.Discard)
+	f.SetOutput(io.Discard)
 	f.StringVar(&s, "s", "", "usage")
 	f.CountVar(&count, "count", "usage")
 	err := f.Parse([]string{})

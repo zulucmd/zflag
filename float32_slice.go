@@ -44,7 +44,7 @@ func (s *float32SliceValue) Set(val string) error {
 	return nil
 }
 
-func (s *float32SliceValue) Get() interface{} {
+func (s *float32SliceValue) Get() any {
 	return *s.value
 }
 

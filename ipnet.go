@@ -20,7 +20,7 @@ func (ipnet ipNetValue) String() string {
 	return n.String()
 }
 
-func (ipnet *ipNetValue) Get() interface{} {
+func (ipnet *ipNetValue) Get() any {
 	return net.IPNet(*ipnet)
 }
 

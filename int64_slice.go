@@ -44,7 +44,7 @@ func (s *int64SliceValue) Set(val string) error {
 	return nil
 }
 
-func (s *int64SliceValue) Get() interface{} {
+func (s *int64SliceValue) Get() any {
 	return *s.value
 }
 
