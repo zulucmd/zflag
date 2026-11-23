@@ -33,15 +33,18 @@ func newStringToIntValue(val map[string]int, p *map[string]int) *stringToIntValu
 // Format: a=1
 func (s *stringToIntValue) Set(val string) error {
 	kv := strings.SplitN(val, "=", 2)
-	if len(kv) != 2 {
+	if !s.valueOptional && len(kv) != 2 {
 		return fmt.Errorf("%s must be formatted as key=value", val)
 	}
-	key, val := kv[0], kv[1]
 
-	val = strings.TrimSpace(val)
-	v, err := strconv.Atoi(val)
-	if err != nil {
-		return errors.New("must be an integer")
+	key := kv[0]
+	var v int
+	if len(kv) == 2 {
+		parsed, err := strconv.Atoi(strings.TrimSpace(kv[1]))
+		if err != nil {
+			return errors.New("must be an integer")
+		}
+		v = parsed
 	}
 
 	if !s.changed {

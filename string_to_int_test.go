@@ -14,6 +14,7 @@ func TestStringToInt(t *testing.T) {
 	tests := []struct {
 		name           string
 		flagDefault    map[string]int
+		flagOpts       []zflag.Opt
 		input          []string
 		expectedErr    string
 		expectedValues map[string]int
@@ -87,6 +88,43 @@ func TestStringToInt(t *testing.T) {
 			expectedValues: map[string]int{"test": 1, "test2": 5, "test3": 9},
 			expectedStr:    "[test=1 test2=5 test3=9]",
 		},
+		{
+			name:        "value not optional by default",
+			input:       []string{"test1"},
+			flagDefault: map[string]int{},
+			expectedErr: `invalid argument "test1" for "--s2i" flag: test1 must be formatted as key=value`,
+		},
+		{
+			name:           "value optional",
+			input:          []string{"test1"},
+			flagDefault:    map[string]int{},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]int{"test1": 0},
+			expectedStr:    "[test1=0]",
+		},
+		{
+			name:           "value optional mixed with explicit values",
+			input:          []string{"test1", "test2=5"},
+			flagDefault:    map[string]int{},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]int{"test1": 0, "test2": 5},
+			expectedStr:    "[test1=0 test2=5]",
+		},
+		{
+			name:           "value optional overrides default values",
+			input:          []string{"test1"},
+			flagDefault:    map[string]int{"test2": 1},
+			flagOpts:       []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedValues: map[string]int{"test1": 0},
+			expectedStr:    "[test1=0]",
+		},
+		{
+			name:        "value optional rejects explicit empty value",
+			input:       []string{"test1="},
+			flagDefault: map[string]int{},
+			flagOpts:    []zflag.Opt{zflag.OptMapValueOptional()},
+			expectedErr: `invalid argument "test1=" for "--s2i" flag: must be an integer`,
+		},
 	}
 
 	t.Parallel()
@@ -97,7 +135,7 @@ func TestStringToInt(t *testing.T) {
 			var s2i map[string]int
 			f := zflag.NewFlagSet("test", zflag.ContinueOnError)
 			f.SetOutput(ioutil.Discard)
-			f.StringToIntVar(&s2i, "s2i", test.flagDefault, "usage")
+			f.StringToIntVar(&s2i, "s2i", test.flagDefault, "usage", test.flagOpts...)
 			err := f.Parse(repeatFlag("--s2i", test.input...))
 			if test.expectedErr != "" {
 				assertErr(t, err)

@@ -33,15 +33,18 @@ func newStringToInt64Value(val map[string]int64, p *map[string]int64) *stringToI
 // Format: a=1,b=2
 func (s *stringToInt64Value) Set(val string) error {
 	kv := strings.SplitN(val, "=", 2)
-	if len(kv) != 2 {
+	if !s.valueOptional && len(kv) != 2 {
 		return fmt.Errorf("%s must be formatted as key=value", val)
 	}
-	key, val := kv[0], kv[1]
 
-	val = strings.TrimSpace(val)
-	v, err := strconv.ParseInt(val, 10, 64)
-	if err != nil {
-		return errors.New("must be an integer")
+	key := kv[0]
+	var v int64
+	if len(kv) == 2 {
+		parsed, err := strconv.ParseInt(strings.TrimSpace(kv[1]), 10, 64)
+		if err != nil {
+			return errors.New("must be an integer")
+		}
+		v = parsed
 	}
 
 	if !s.changed {
