@@ -469,6 +469,13 @@ Tooling is managed with [mise](https://mise.jdx.dev). Run `mise install`, then:
 - `mise run setup` — install the git hooks (prek)
 - `mise run lint` — run golangci-lint
 - `mise run test` — run the test suite
+- `mise run unittest` — run the unit tests with race detection and coverage
+- `mise run zulutest` — run the zulu integration suite
+- `mise run test:all` — run unittest, zulutest, and lint
+- `mise run all` — run lint, test:all, and clean
 - `mise run check` — run every prek hook against all files
+- `mise run clean` — remove the cloned zulu checkout
+
+The multi-step tasks (`all`, `test:all`, `zulutest`) are file tasks in `mise/tasks/`.
 
 Git hooks are run by [prek](https://github.com/j178/prek).

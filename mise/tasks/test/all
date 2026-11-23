@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mise run unittest
+mise run zulutest
+mise run lint

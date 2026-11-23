@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ ! -d zulu ]; then
+  git clone https://github.com/zulucmd/zulu.git
+  ln -s ../../zflag zulu/zflag
+fi
+
+cd zulu
+go mod edit -replace github.com/zulucmd/zflag=./zflag
+
+if command -v richgo >/dev/null 2>&1; then
+  richgo test -v ./...
+else
+  go test -v ./...
+fi
